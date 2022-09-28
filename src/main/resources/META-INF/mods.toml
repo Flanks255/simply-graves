@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[43,)"
+license="MIT"
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+[[mods]]
+modId="simplygraves"
+version="${file.jarVersion}"
+displayName="Simply-Graves"
+logoFile="examplemod.png"
+credits=""
+authors="Flanks255"
+description='''
+'''
