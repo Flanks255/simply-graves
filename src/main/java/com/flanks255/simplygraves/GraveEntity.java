@@ -3,13 +3,9 @@ package com.flanks255.simplygraves;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -51,7 +47,7 @@ public class GraveEntity extends BlockEntity {
 
     // bulk sync
     @Override
-    public CompoundTag getUpdateTag() {
+    public @NotNull CompoundTag getUpdateTag() {
         var tag = super.getUpdateTag();
 
         tag.putUUID("UUID", uuid);
@@ -74,7 +70,7 @@ public class GraveEntity extends BlockEntity {
 
     //save/load
     @Override
-    public void load(CompoundTag pTag) {
+    public void load(@NotNull CompoundTag pTag) {
         super.load(pTag);
 
         uuid = pTag.getUUID("UUID");
@@ -84,7 +80,7 @@ public class GraveEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
+    protected void saveAdditional(@NotNull CompoundTag pTag) {
         super.saveAdditional(pTag);
 
         pTag.putUUID("UUID", uuid);

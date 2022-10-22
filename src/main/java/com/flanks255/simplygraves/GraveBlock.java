@@ -10,25 +10,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
+@SuppressWarnings("deprecation")
 public class GraveBlock extends Block implements EntityBlock {
     public final Grave graveType;
     public GraveBlock(Grave graveIn) {
@@ -48,10 +46,8 @@ public class GraveBlock extends Block implements EntityBlock {
         return graveType.shape;
     }
 
-
-
     @Override
-    public InteractionResult use(@Nonnull BlockState pState, Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
+    public @NotNull InteractionResult use(@Nonnull BlockState pState, Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
         if (!pLevel.isClientSide() && !pPlayer.isCrouching() && pHand == InteractionHand.MAIN_HAND && pLevel.getBlockState(pPos).hasBlockEntity() && pLevel.getBlockEntity(pPos) instanceof GraveEntity entity) {
             UUID playeruuid = pPlayer.getUUID();
             entity.getUUID().ifPresent(uuid -> {

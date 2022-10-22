@@ -5,17 +5,11 @@ import com.flanks255.simplygraves.WSD.PreferenceStorage;
 import com.flanks255.simplygraves.config.CommonConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,7 +17,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.RegistryObject;
@@ -34,35 +27,30 @@ import java.util.UUID;
 public class DropEvent {
     public static void Event(LivingDropsEvent event) {
         if (event.getEntity() instanceof Player player && !event.getEntity().level.isClientSide) {
-            if (CommonConfig.FORCE_GRAVE_OPTION.get()) {
-                if (!CommonConfig.DEFAULT_GRAVE_OPTION.get())
-                    return;
-            } else {
-                var pref = PreferenceStorage.get().getPrefs(player.getUUID()).getGraveOption();
-                if(!pref.orElse(CommonConfig.DEFAULT_GRAVE_OPTION.get()))
-                    return;
+            var pref = PreferenceStorage.get().getPrefs(player.getUUID()).getGraveOption();
+            if(!CommonConfig.FORCE_GRAVE_OPTION.get() && !pref.orElse(CommonConfig.DEFAULT_GRAVE_OPTION.get()))
+                return;
 
-                if (pref.isEmpty()) {
-                    player.sendSystemMessage(Component.translatable(CommonConfig.DEFAULT_GRAVE_OPTION.get()?"simplygraves.server_enabled":"simplygraves.server_disabled"));
-                    player.sendSystemMessage(Component.translatable("simplygraves.server_choice"));
-                    var optInLink = Component.literal("Opt-in");
-                    optInLink.withStyle(style -> style
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sg option enable"))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Enable Graves")))
-                            .withColor(ChatFormatting.GREEN)
-                            .withUnderlined(true));
-                    var optOutLink = Component.literal("Opt-out");
-                    optOutLink.withStyle(style -> style
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sg option disable"))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Disable Graves")))
-                            .withColor(ChatFormatting.GREEN)
-                            .withUnderlined(true));
-                    player.sendSystemMessage(Component.literal("[").append(optInLink).append("] - [").append(optOutLink).append("]"));
-                }
+            if (pref.isEmpty()) {
+                player.sendSystemMessage(Component.translatable(CommonConfig.DEFAULT_GRAVE_OPTION.get()?"simplygraves.server_enabled":"simplygraves.server_disabled"));
+                player.sendSystemMessage(Component.translatable("simplygraves.server_choice"));
+                var optInLink = Component.literal("Opt-in");
+                optInLink.withStyle(style -> style
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sg option enable"))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Enable Graves")))
+                        .withColor(ChatFormatting.GREEN)
+                        .withUnderlined(true));
+                var optOutLink = Component.literal("Opt-out");
+                optOutLink.withStyle(style -> style
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sg option disable"))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Disable Graves")))
+                        .withColor(ChatFormatting.GREEN)
+                        .withUnderlined(true));
+                player.sendSystemMessage(Component.literal("[").append(optInLink).append("] - [").append(optOutLink).append("]"));
             }
 
             Collection<ItemEntity> drops = event.getDrops();
-            if (drops.isEmpty()) //No items, dont waste a grave.
+            if (drops.isEmpty()) //No items, don't waste a grave.
                 return;
 
             ItemStackHandler inventory = new ItemStackHandler(drops.size());

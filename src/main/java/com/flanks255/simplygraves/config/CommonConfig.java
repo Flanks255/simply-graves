@@ -13,7 +13,7 @@ public class CommonConfig {
     static {
         DEFAULT_GRAVE_OPTION = COMMON_BUILDER.comment("Default grave option for players.")
                 .define("defaultOption", true);
-        FORCE_GRAVE_OPTION = COMMON_BUILDER.comment("Force grave option regardless of player preference")
+        FORCE_GRAVE_OPTION = COMMON_BUILDER.comment("Force graves regardless of player preference")
                 .define("forceOption", false);
         DELAY_TO_PUBLIC = COMMON_BUILDER.comment("Time delay until a grave becomes public, in seconds.")
                 .defineInRange("publicDelay", 3600, 0 , Integer.MAX_VALUE);
