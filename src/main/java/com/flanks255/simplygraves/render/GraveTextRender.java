@@ -54,7 +54,7 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity> {
         if (isMine || timeRemaining == 0) {
             matrixStack.translate(0, -15, 0);
             matrixStack.scale(0.25f, 0.25f, 0.25f);
-            Screen.drawCenteredString(matrixStack, font, "Sneak right-click to collect.", 0, 0, 0xffffff);
+            Screen.drawCenteredString(matrixStack, font, "Right-click to collect.", 0, 0, 0xffffff);
         }
 
         matrixStack.popPose();
