@@ -19,5 +19,6 @@ public class LangGen extends LanguageProvider {
     add("simplygraves.server_choice", "Would you like to use graves in the future?");
     add("simplygraves.failed", "Sorry, your grave failed to place.");
     add("simplygraves.success", "Your grave is located at: %s, in: %s, GraveID: %s");
+    add("simplygraves.not_yours", "Sorry, this grave belongs to %s, please try again later...");
     }
 }

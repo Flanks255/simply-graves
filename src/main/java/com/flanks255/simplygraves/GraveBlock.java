@@ -48,13 +48,15 @@ public class GraveBlock extends Block implements EntityBlock {
         return graveType.shape;
     }
 
+
+
     @Override
     public InteractionResult use(@Nonnull BlockState pState, Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
-        if (!pLevel.isClientSide() && pPlayer.isCrouching() && pHand == InteractionHand.MAIN_HAND && pLevel.getBlockState(pPos).hasBlockEntity() && pLevel.getBlockEntity(pPos) instanceof GraveEntity entity) {
+        if (!pLevel.isClientSide() && !pPlayer.isCrouching() && pHand == InteractionHand.MAIN_HAND && pLevel.getBlockState(pPos).hasBlockEntity() && pLevel.getBlockEntity(pPos) instanceof GraveEntity entity) {
             UUID playeruuid = pPlayer.getUUID();
             entity.getUUID().ifPresent(uuid -> {
                 var storage = GraveStorage.get();
-                    if (!storage.getGrave(uuid).isPresent()) {
+                    if (storage.getGrave(uuid).isEmpty()) {
                         storage.removeGrave(uuid);
                         pLevel.removeBlockEntity(pPos);
                         pLevel.removeBlock(pPos, false);
@@ -62,7 +64,7 @@ public class GraveBlock extends Block implements EntityBlock {
                     }
                     storage.getGrave(uuid).ifPresent(graveData -> {
                         if (playeruuid.compareTo(graveData.playerUUID) > 0 && (graveData.deathTime + (CommonConfig.DELAY_TO_PUBLIC.get()*1000)) > System.currentTimeMillis()) {//Not yo grave
-                            pPlayer.sendSystemMessage(Component.literal("Too soon..."));
+                            pPlayer.sendSystemMessage(Component.translatable("simplygraves.not_yours", graveData.playerName));
                             return;
                         }
                     var inv = graveData.inventory;
@@ -79,14 +81,7 @@ public class GraveBlock extends Block implements EntityBlock {
                 });
             });
         }
-        if (!pLevel.isClientSide && !pPlayer.isCrouching() && pHand == InteractionHand.MAIN_HAND && pLevel.getBlockState(pPos).hasBlockEntity() && pLevel.getBlockEntity(pPos) instanceof GraveEntity entity) {
-            entity.getUUID().ifPresent(uuid -> {
-                var storage = GraveStorage.get();
-                storage.getGrave(uuid).ifPresent(graveData -> {
-                    pPlayer.sendSystemMessage(Component.literal(graveData.playerName));
-                });
-            });
-        }
+
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
     @Override
