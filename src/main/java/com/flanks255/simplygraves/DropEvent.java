@@ -28,7 +28,7 @@ public class DropEvent {
     public static void Event(LivingDropsEvent event) {
         if (event.getEntity() instanceof Player player && !event.getEntity().level.isClientSide) {
             var pref = PreferenceStorage.get().getPrefs(player.getUUID()).getGraveOption();
-            if(!CommonConfig.FORCE_GRAVE_OPTION.get() && !pref.orElse(CommonConfig.DEFAULT_GRAVE_OPTION.get()))
+            if(!pref.orElse(CommonConfig.DEFAULT_GRAVE_OPTION.get()))
                 return;
 
             if (pref.isEmpty()) {
