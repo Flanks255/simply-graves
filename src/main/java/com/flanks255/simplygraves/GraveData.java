@@ -7,10 +7,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class GraveData {
+public class GraveData implements Comparable<GraveData>{
         public final UUID playerUUID;
         public final String playerName;
         public final UUID graveUUID;
@@ -73,5 +74,10 @@ public class GraveData {
 
 
         return new GraveData(playerUUID, playerName, graveUUID, blockPos, dim, deathTime, inventory, failed);
+    }
+
+    @Override
+    public int compareTo(@NotNull GraveData o) {
+        return Long.compare(o.deathTime, deathTime);
     }
 }

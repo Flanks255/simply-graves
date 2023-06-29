@@ -8,10 +8,11 @@ public class SGCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         var commands = dispatcher.register(
             Commands.literal("simplygraves")
-                .then(Recover.register())
-                .then(List.register())
-                .then(Option.register())
-                .then(Failed.register())
+                    .then(Last.register())
+                    .then(Recover.register())
+                    .then(List.register())
+                    .then(Option.register())
+                    .then(Failed.register())
         );
 
         dispatcher.register(Commands.literal("sg").redirect(commands));

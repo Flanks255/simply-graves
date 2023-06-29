@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[43,)"
 license="MIT"
-#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+issueTrackerURL="https://github.com/Flanks255/simply-graves/issues" #optional
 [[mods]]
 modId="simplygraves"
 version="${file.jarVersion}"

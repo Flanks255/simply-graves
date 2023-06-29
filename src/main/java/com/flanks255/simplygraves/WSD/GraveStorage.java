@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.server.ServerLifecycleHooks;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -66,6 +67,10 @@ public class GraveStorage extends SavedData {
         if (data.containsKey(uuid))
             return Optional.of(data.get(uuid));
         return Optional.empty();
+    }
+
+    public Optional<GraveData> getLastGrave(ServerPlayer player) {
+        return data.values().stream().filter(g -> g.playerUUID.compareTo(player.getUUID()) == 0).sorted().findFirst();
     }
 
     public Optional<GraveData> getFailedGrave(ServerPlayer player) {

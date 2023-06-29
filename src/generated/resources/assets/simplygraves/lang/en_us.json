@@ -12,6 +12,8 @@
   "block.simplygraves.gravestone_wood": "Gravestone Wood",
   "block.simplygraves.stone_gravestone": "Stone Gravestone",
   "simplygraves.failed": "Sorry, your grave failed to place.",
+  "simplygraves.latest_grave": "Latest Grave",
+  "simplygraves.no_graves": "No graves found.",
   "simplygraves.not_yours": "Sorry, this grave belongs to %s, please try again later...",
   "simplygraves.server_choice": "Would you like to use graves in the future?",
   "simplygraves.server_disabled": "The default for graves is currently disabled, and a grave has not been created for this death.",
