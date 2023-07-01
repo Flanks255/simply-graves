@@ -9,7 +9,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
@@ -22,7 +21,7 @@ import java.util.Set;
 public class List {
     private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
-        return Commands.literal("list")
+        return Commands.literal("list").requires(cs -> cs.hasPermission(1))
             .executes(cs -> list(cs, ""))
                 .then(Commands.argument("PlayerName", StringArgumentType.string())
                 .suggests((cs, builder) -> SharedSuggestionProvider.suggest(getPlayerSuggestions(cs), builder))
