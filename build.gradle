@@ -22,8 +22,8 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply from: 'https://files.saps.dev/ci/git-md-changelog.gradle'
 
 repositories {
+    maven { url = 'https://maven.creeperhost.net/' }
     maven { url "https://www.cursemaven.com" }
-    maven { url "https://dvs1.progwml6.com/files/maven" }
 }
 
 def ENV = System.getenv()
@@ -107,8 +107,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
-    compileOnly fg.deobf("curse.maven:TOP-245211:3965693")
-    runtimeOnly fg.deobf("curse.maven:TOP-245211:3965693")
+    compileOnly fg.deobf("curse.maven:TOP-245211:4629624")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -162,7 +161,7 @@ if (ENV.CURSEFORGE_KEY) {
             id = project.curseforge_id
             releaseType = "release"
             addGameVersion "Forge"
-            addGameVersion "1.19.2"
+            addGameVersion "1.20.1"
             mainArtifact(jar)
             changelog = getGitChangelog
             changelogType = 'markdown'

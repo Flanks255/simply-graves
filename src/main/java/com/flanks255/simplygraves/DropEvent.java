@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class DropEvent {
     public static void Event(LivingDropsEvent event) {
-        if (event.getEntity() instanceof Player player && !event.getEntity().level.isClientSide) {
+        if (event.getEntity() instanceof Player player && !event.getEntity().level().isClientSide) {
             var pref = PreferenceStorage.get().getPrefs(player.getUUID()).getGraveOption();
             if(!pref.orElse(CommonConfig.DEFAULT_GRAVE_OPTION.get()))
                 return;
@@ -65,17 +65,17 @@ public class DropEvent {
                     name,
                     uuid,
                     pos,
-                    player.level.dimension(),
+                    player.level().dimension(),
                     time,
                     inventory,
                     false
             ));
 
-            Level level = player.level;
+            Level level = player.level();
             BlockPos gravePos = search(level, pos);
             boolean replaceable = valid(level, gravePos);
             if (replaceable) {
-                RegistryObject<GraveBlock> block = SGBlocks.GRAVES.get(event.getEntity().getLevel().random.nextInt(SGBlocks.GRAVES.size()));
+                RegistryObject<GraveBlock> block = SGBlocks.GRAVES.get(event.getEntity().level().random.nextInt(SGBlocks.GRAVES.size()));
                 BlockState state = block.get().defaultBlockState();
                 if (level.setBlock(gravePos, state, 3)) {
                     if(level.getBlockState(gravePos).hasBlockEntity() && level.getBlockEntity(gravePos) instanceof GraveEntity entity) {
@@ -118,7 +118,7 @@ public class DropEvent {
         player.sendSystemMessage(Component.literal("    [").append(recover).append("]"));
     }
     private static boolean valid(Level level, BlockPos pos) {
-        return level.getBlockState(pos).getMaterial().isReplaceable();
+        return level.getBlockState(pos).canBeReplaced();
     }
 
     private static BlockHitResult checkColumn(Level level, BlockPos pos) {

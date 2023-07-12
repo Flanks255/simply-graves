@@ -1,7 +1,7 @@
 package com.flanks255.simplygraves;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -59,7 +59,7 @@ public class GraveData implements Comparable<GraveData>{
         int x = nbt.getInt("X");
         int y = nbt.getInt("Y");
         int z = nbt.getInt("Z");
-        ResourceKey<Level> dim = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(nbt.getString("Dim")));
+        ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(nbt.getString("Dim")));
 
         BlockPos blockPos = new BlockPos(x, y, z);
 

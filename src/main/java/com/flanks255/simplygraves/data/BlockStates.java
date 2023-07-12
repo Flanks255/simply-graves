@@ -8,7 +8,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockStates extends BlockStateProvider {
     public BlockStates(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, SimplyGraves.MODID, exFileHelper);
+        super(gen.getPackOutput(), SimplyGraves.MODID, exFileHelper);
     }
 
     @Override

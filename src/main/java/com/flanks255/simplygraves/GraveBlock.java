@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -30,7 +30,9 @@ import java.util.UUID;
 public class GraveBlock extends Block implements EntityBlock {
     public final Grave graveType;
     public GraveBlock(Grave graveIn) {
-        super(BlockBehaviour.Properties.of(Material.STONE).strength(100.0F, 3600000.0F));
+        super(BlockBehaviour.Properties.of()
+                .strength(100.0F, 3600000.0F)
+                .pushReaction(PushReaction.BLOCK));
         graveType = graveIn;
     }
 

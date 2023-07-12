@@ -3,10 +3,9 @@ package com.flanks255.simplygraves.render;
 import com.flanks255.simplygraves.GraveEntity;
 import com.flanks255.simplygraves.config.CommonConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
@@ -37,10 +36,10 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity> {
         BlockPos gravePos = graveEntity.getBlockPos();
         boolean isMine = graveEntity.getPlayer().compareTo(Minecraft.getInstance().player.getUUID()) == 0;
         double angle = Mth.atan2(cameraPos.z - (gravePos.getZ() + 0.5f), cameraPos.x - (gravePos.getX() + 0.5f));
-        matrixStack.mulPose(Vector3f.YP.rotation((float) ((Math.PI / 2) - (float) angle)));
+        matrixStack.mulPose(Axis.YP.rotation((float) ((Math.PI / 2) - (float) angle)));
 
         Font font = Minecraft.getInstance().font;
-        Screen.drawCenteredString(matrixStack, font, graveEntity.getPlayerName(), 0,-25, 0xffffff);
+        drawCenteredString(matrixStack, font, graveEntity.getPlayerName(), 0,-25, 0xffffff, pBufferSource);
 
         long timeRemaining = 0;
         if (!isMine) {
@@ -48,16 +47,21 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity> {
             if (timeRemaining > 0) {
                 matrixStack.translate(0, -15, 0);
                 matrixStack.scale(0.25f, 0.25f, 0.25f);
-                Screen.drawCenteredString(matrixStack, font, format.format(timeRemaining), 0, 0, 0xffff00);
+                drawCenteredString(matrixStack, font, format.format(timeRemaining), 0, 0, 0xffff00, pBufferSource);
             }
         }
         if (isMine || timeRemaining == 0) {
             matrixStack.translate(0, -15, 0);
             matrixStack.scale(0.25f, 0.25f, 0.25f);
-            Screen.drawCenteredString(matrixStack, font, "Right-click to collect.", 0, 0, 0xffffff);
+            drawCenteredString(matrixStack, font, "Right-click to collect.", 0, 0, 0xffffff, pBufferSource);
         }
 
         matrixStack.popPose();
+    }
+
+    private void drawCenteredString(PoseStack matrixStack, Font font, String string, int x, int y, int color, @NotNull MultiBufferSource pBufferSource) {
+        float offset = -font.width(string) / 2.0f;
+        font.drawInBatch(string, x + offset, y, color, false, matrixStack.last().pose(), pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
     }
 
     @Override

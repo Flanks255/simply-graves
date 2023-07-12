@@ -2,7 +2,6 @@ package com.flanks255.simplygraves.commands;
 
 import com.flanks255.simplygraves.WSD.PreferenceStorage;
 import com.flanks255.simplygraves.config.CommonConfig;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -47,8 +46,8 @@ public class Option {
         var prefs = preferenceStorage.getPrefs(ctx.getSource().getPlayer().getUUID());
 
         prefs.getGraveOption().ifPresentOrElse(
-                b -> ctx.getSource().sendSuccess(Component.literal("Grave Option: " + (b?"Enabled":"Disabled")), false),
-                () -> ctx.getSource().sendSuccess(Component.literal("Grave Option: Unset"), false));
+                b -> ctx.getSource().sendSuccess(() -> Component.literal("Grave Option: " + (b?"Enabled":"Disabled")), false),
+                () -> ctx.getSource().sendSuccess(() -> Component.literal("Grave Option: Unset"), false));
         return 0;
     }
 }

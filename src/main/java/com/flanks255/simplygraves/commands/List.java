@@ -39,7 +39,7 @@ public class List {
         var data = storage.getData();
 
         if (data.size() == 0) {
-            ctx.getSource().sendSuccess(Component.literal("[ ]"), false);
+            ctx.getSource().sendSuccess(() -> Component.literal("[ ]"), false);
             return 0;
         }
 

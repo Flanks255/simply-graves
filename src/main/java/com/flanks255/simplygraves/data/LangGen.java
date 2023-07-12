@@ -7,7 +7,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 
 public class LangGen extends LanguageProvider {
     public LangGen(DataGenerator gen) {
-        super(gen, SimplyGraves.MODID, "en_us");
+        super(gen.getPackOutput(), SimplyGraves.MODID, "en_us");
     }
 
     protected void addMy(String key, String value){

@@ -2,19 +2,23 @@ package com.flanks255.simplygraves.data;
 
 import com.flanks255.simplygraves.SGBlocks;
 import com.flanks255.simplygraves.SimplyGraves;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
 public class BlockTagGen extends BlockTagsProvider {
-    public BlockTagGen(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pGenerator, SimplyGraves.MODID, existingFileHelper);
+    public BlockTagGen(DataGenerator generator, CompletableFuture<HolderLookup.Provider> thingIDontUse, @Nullable ExistingFileHelper existingFileHelper) {
+        super(generator.getPackOutput(), thingIDontUse, SimplyGraves.MODID, existingFileHelper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(@Nonnull HolderLookup.Provider $) {
         SGBlocks.BLOCKS.getEntries().forEach(b -> {
             tag(BlockTags.WITHER_IMMUNE).add(b.get());
             tag(BlockTags.DRAGON_IMMUNE).add(b.get());
