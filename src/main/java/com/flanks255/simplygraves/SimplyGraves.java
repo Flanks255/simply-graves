@@ -5,16 +5,11 @@ import com.flanks255.simplygraves.commands.SGCommands;
 import com.flanks255.simplygraves.config.CommonConfig;
 import com.flanks255.simplygraves.data.Generator;
 import com.flanks255.simplygraves.render.EntityRenders;
-import com.flanks255.simplygraves.render.GraveTextRender;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.logging.LogUtils;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -52,7 +47,7 @@ public class SimplyGraves
             bus.addListener(EntityRenders::registerEntityRenderers);
         }
 
-        MinecraftForge.EVENT_BUS.addListener(DropEvent::Event);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, DropEvent::Event);
         MinecraftForge.EVENT_BUS.addListener(this::commandsRegister);
     }
 
