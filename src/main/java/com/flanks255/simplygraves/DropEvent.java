@@ -21,7 +21,9 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class DropEvent {
@@ -54,7 +56,17 @@ public class DropEvent {
                 return;
 
             ItemStackHandler inventory = new ItemStackHandler(drops.size());
-            drops.forEach(drop -> ItemHandlerHelper.insertItem(inventory, drop.getItem(), false));
+
+            List<ItemEntity> toRemove = new ArrayList<>();
+            drops.forEach(drop -> {
+                if (!drop.getItem().is(SimplyGraves.NO_GRAVE)) {
+                    ItemHandlerHelper.insertItem(inventory, drop.getItem(), false);
+                    toRemove.add(drop);
+                }
+            });
+
+            toRemove.forEach(drops::remove);
+
             UUID uuid = UUID.randomUUID();
             BlockPos pos = player.getOnPos().above();
             long time = System.currentTimeMillis();
@@ -92,8 +104,6 @@ public class DropEvent {
             }
             else
                 failedGrave(player, uuid);
-
-            event.setCanceled(true);
         }
     }
 
