@@ -31,6 +31,7 @@ public class GraveBlock extends Block implements EntityBlock {
     public final Grave graveType;
     public GraveBlock(Grave graveIn) {
         super(BlockBehaviour.Properties.of()
+                .forceSolidOn()
                 .strength(100.0F, 3600000.0F)
                 .pushReaction(PushReaction.BLOCK));
         graveType = graveIn;
