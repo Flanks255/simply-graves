@@ -6,7 +6,7 @@ import com.flanks255.simplygraves.config.CommonConfig;
 import com.flanks255.simplygraves.data.Generator;
 import com.flanks255.simplygraves.render.EntityRenders;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -34,7 +34,7 @@ public class SimplyGraves
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MODID = "simplygraves";
 
-    public static final TagKey<Item> NO_GRAVE = TagKey.create(Registries.ITEM, new ResourceLocation("simplygraves", "no_grave"));
+    public static final TagKey<Item> NO_GRAVE = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("simplygraves", "no_grave"));
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SimplyGraves.MODID);
 
     public SimplyGraves()

@@ -8,6 +8,8 @@ public class Generator {
 
         generator.addProvider(true, new BlockStates(generator, event.getExistingFileHelper()));
         generator.addProvider(true, new LangGen(generator));
-        generator.addProvider(true, new BlockTagGen(generator, event.getExistingFileHelper()));
+        BlockTagGen blocks = new BlockTagGen(generator, event.getExistingFileHelper());
+        generator.addProvider(true, blocks);
+        generator.addProvider(true, new SGItemTags(generator, blocks, event.getExistingFileHelper()));
     }
 }
