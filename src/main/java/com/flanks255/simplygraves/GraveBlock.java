@@ -30,7 +30,7 @@ import java.util.UUID;
 public class GraveBlock extends Block implements EntityBlock {
     public final Grave graveType;
     public GraveBlock(Grave graveIn) {
-        super(BlockBehaviour.Properties.of(Material.STONE).strength(100.0F, 3600000.0F));
+        super(BlockBehaviour.Properties.of(Material.STONE).strength(200.0F, 3600000.0F));
         graveType = graveIn;
     }
 

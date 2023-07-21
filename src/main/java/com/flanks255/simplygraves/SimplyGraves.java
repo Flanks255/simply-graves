@@ -35,6 +35,9 @@ public class SimplyGraves
     public static final String MODID = "simplygraves";
 
     public static final TagKey<Item> NO_GRAVE = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("simplygraves", "no_grave"));
+    public static final TagKey<Item> NO_GRAVE = TagKey.create(Registries.ITEM, new ResourceLocation("simplygraves", "no_grave"));
+
+    public static final TagKey<Block> FTBCHUNKS = TagKey.create(Registries.BLOCK, new ResourceLocation("ftbchunks", "interact_whitelist"));
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SimplyGraves.MODID);
 
     public SimplyGraves()

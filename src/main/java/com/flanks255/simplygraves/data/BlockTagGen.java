@@ -18,6 +18,8 @@ public class BlockTagGen extends BlockTagsProvider {
         SGBlocks.BLOCKS.getEntries().forEach(b -> {
             tag(BlockTags.WITHER_IMMUNE).add(b.get());
             tag(BlockTags.DRAGON_IMMUNE).add(b.get());
+
+            tag(SimplyGraves.FTBCHUNKS).add(b.get());
         });
     }
 }
