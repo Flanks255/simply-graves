@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -35,6 +36,8 @@ public class SimplyGraves
     public static final String MODID = "simplygraves";
 
     public static final TagKey<Item> NO_GRAVE = TagKey.create(Registries.ITEM, new ResourceLocation("simplygraves", "no_grave"));
+
+    public static final TagKey<Block> FTBCHUNKS = TagKey.create(Registries.BLOCK, new ResourceLocation("ftbchunks", "interact_whitelist"));
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SimplyGraves.MODID);
 
     public SimplyGraves()
