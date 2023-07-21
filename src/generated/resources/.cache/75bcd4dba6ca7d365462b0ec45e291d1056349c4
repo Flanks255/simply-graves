@@ -1,3 +1,4 @@
-// 1.19.2	2022-09-13T17:22:50.1012635	Tags for minecraft:block
+// 1.19.2	2023-07-21T15:44:54.0363256	Tags for minecraft:block
+f199154d56639bcbc2343e8f019fd279b3859bd9 data/ftbchunks/tags/blocks/interact_whitelist.json
 f199154d56639bcbc2343e8f019fd279b3859bd9 data/minecraft/tags/blocks/dragon_immune.json
 f199154d56639bcbc2343e8f019fd279b3859bd9 data/minecraft/tags/blocks/wither_immune.json
