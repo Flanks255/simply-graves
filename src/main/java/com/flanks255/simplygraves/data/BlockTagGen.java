@@ -20,6 +20,8 @@ public class BlockTagGen extends BlockTagsProvider {
             tag(BlockTags.DRAGON_IMMUNE).add(b.get());
 
             tag(SimplyGraves.FTBCHUNKS).add(b.get());
+            tag(SimplyGraves.GAIA_BLOCK).add(b.get());
+            tag(SimplyGraves.GRAVES).add(b.get());
         });
     }
 }

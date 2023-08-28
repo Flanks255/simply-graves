@@ -22,8 +22,8 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply from: 'https://files.saps.dev/ci/git-md-changelog.gradle'
 
 repositories {
+    maven { url = 'https://maven.creeperhost.net/' }
     maven { url "https://www.cursemaven.com" }
-    maven { url "https://dvs1.progwml6.com/files/maven" }
 }
 
 def ENV = System.getenv()
