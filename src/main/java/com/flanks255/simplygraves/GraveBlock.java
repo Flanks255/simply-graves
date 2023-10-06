@@ -59,7 +59,7 @@ public class GraveBlock extends Block implements EntityBlock {
                         pLevel.levelEvent(2001, pPos, Block.getId(pState));
                     }
                     storage.getGrave(uuid).ifPresent(graveData -> {
-                        if (playerUUID.compareTo(graveData.playerUUID) > 0 && (graveData.deathTime + (CommonConfig.DELAY_TO_PUBLIC.get()*1000)) > System.currentTimeMillis()) {//Not yo grave
+                        if (!playerUUID.equals(graveData.playerUUID) && (graveData.deathTime + (CommonConfig.DELAY_TO_PUBLIC.get()*1000)) > System.currentTimeMillis()) {//Not yo grave
                             pPlayer.sendSystemMessage(Component.translatable("simplygraves.not_yours", graveData.playerName));
                             return;
                         }
