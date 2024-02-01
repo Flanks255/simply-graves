@@ -8,7 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class GraveStorage extends SavedData {
 
     public static GraveStorage get() {
         if (INSTANCE == null) {
-            INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(GraveStorage::load, GraveStorage::new, NAME);
+            INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(GraveStorage::new, GraveStorage::load), NAME);
         }
         return INSTANCE;
     }

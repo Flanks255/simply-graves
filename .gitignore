@@ -4,6 +4,7 @@
 build/
 out/
 run/
+runs/
 .gradle/
 .idea/
 /logs/

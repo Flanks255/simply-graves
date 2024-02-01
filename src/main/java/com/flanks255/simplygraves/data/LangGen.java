@@ -3,7 +3,7 @@ package com.flanks255.simplygraves.data;
 import com.flanks255.simplygraves.SGBlocks;
 import com.flanks255.simplygraves.SimplyGraves;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 
 public class LangGen extends LanguageProvider {
     public LangGen(DataGenerator gen) {

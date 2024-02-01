@@ -1,6 +1,5 @@
 package com.flanks255.simplygraves.WSD;
 
-import com.flanks255.simplygraves.GraveData;
 import com.flanks255.simplygraves.PlayerPreferences;
 import com.flanks255.simplygraves.SimplyGraves;
 import net.minecraft.nbt.CompoundTag;
@@ -8,7 +7,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -42,7 +41,7 @@ public class PreferenceStorage extends SavedData {
 
     public static PreferenceStorage get() {
         if (INSTANCE == null) {
-            INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(PreferenceStorage::load, PreferenceStorage::new, NAME);
+            INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(PreferenceStorage::new, PreferenceStorage::load), NAME);
         }
         return INSTANCE;
     }
