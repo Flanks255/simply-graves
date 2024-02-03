@@ -9,6 +9,7 @@ public class CommonConfig {
     public static ForgeConfigSpec.BooleanValue DEFAULT_GRAVE_OPTION;
     public static ForgeConfigSpec.BooleanValue OPERATOR_ONLY;
     public static ForgeConfigSpec.IntValue DELAY_TO_PUBLIC;
+    public static ForgeConfigSpec.BooleanValue AUTO_EQUIP;
 
     static {
         DEFAULT_GRAVE_OPTION = COMMON_BUILDER.comment("Default grave option for players.")
@@ -17,6 +18,8 @@ public class CommonConfig {
                 .define("operatorOnly", false);
         DELAY_TO_PUBLIC = COMMON_BUILDER.comment("Time delay until a grave becomes public, in seconds.")
                 .defineInRange("publicDelay", 3600, 0 , Integer.MAX_VALUE);
+        AUTO_EQUIP = COMMON_BUILDER.comment("Default state for auto equipping items recovered from your grave.")
+                .define("autoEquip", true);
 
         COMMON_CONFIG = COMMON_BUILDER.build();
     }

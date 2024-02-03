@@ -1,6 +1,5 @@
 package com.flanks255.simplygraves.WSD;
 
-import com.flanks255.simplygraves.GraveData;
 import com.flanks255.simplygraves.PlayerPreferences;
 import com.flanks255.simplygraves.SimplyGraves;
 import net.minecraft.nbt.CompoundTag;
