@@ -4,9 +4,8 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.84'
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "me.modmuss50.mod-publish-plugin" version "0.4.5"
 }
-apply plugin: "com.matthewprenger.cursegradle"
 apply from: 'https://files.saps.dev/ci/git-md-changelog.gradle'
 
 def ENV = System.getenv()
@@ -44,10 +43,6 @@ runs {
     }
 
     data {
-        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-        // workingDirectory project.file('run-data')
-
-        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
         programArguments.addAll '--mod', "simplygraves", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
@@ -70,34 +65,10 @@ dependencies {
 //    compileOnly "curse.maven:TOP-245211:4629624"
 }
 
-// Example for how to get properties into the manifest for reading at runtime.
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : "simplygraves",
-                "Specification-Vendor"    : "Flanks255",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${version}",
-                "Implementation-Vendor"   : "Flanks255",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact(reobfArtifact) {
-                builtBy reobfArtifact
-                artifactId = archivesBaseName
-                classifier null
-            }
+        register('mavenJava', MavenPublication) {
+            from components.java
         }
     }
 
@@ -114,18 +85,17 @@ publishing {
     }
 }
 
-if (ENV.CURSEFORGE_KEY) {
+//https://modmuss50.github.io/mod-publish-plugin/
+publishMods {
+    dryRun = !providers.environmentVariable("CURSEFORGE_KEY").isPresent()
+    file = jar.archiveFile
+    changelog = file("./CHANGELOG.md").text
+    modLoaders.add("NeoForge")
+    type = STABLE
     curseforge {
-        apiKey = ENV.CURSEFORGE_KEY
-        project {
-            id = project.curseforge_id
-            releaseType = "release"
-            addGameVersion "NeoForge"
-            addGameVersion "1.20.4"
-            mainArtifact(jar)
-            changelog = getGitChangelog
-            changelogType = 'markdown'
-        }
+        accessToken = providers.environmentVariable("CURSEFORGE_KEY")
+        projectId = project.curseforge_id
+        minecraftVersions.add(project.minecraft_version)
     }
 }
 
