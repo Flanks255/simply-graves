@@ -1,6 +1,5 @@
 plugins {
     id 'java-library'
-    id 'eclipse'
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.84'
@@ -68,6 +67,9 @@ dependencies {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
+            groupId project.group
+            artifactId base.archivesName.get()
+            version project.version
             from components.java
         }
     }
@@ -89,6 +91,7 @@ publishing {
 publishMods {
     dryRun = !providers.environmentVariable("CURSEFORGE_KEY").isPresent()
     file = jar.archiveFile
+    displayName = base.archivesName.get()
     changelog = file("./CHANGELOG.md").text
     modLoaders.add("NeoForge")
     type = STABLE
