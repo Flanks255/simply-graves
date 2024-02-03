@@ -1,96 +1,54 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.creeperhost.net/' }
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
-    }
-}
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 plugins {
+    id 'java-library'
     id 'eclipse'
+    id 'idea'
     id 'maven-publish'
+    id 'net.neoforged.gradle.userdev' version '7.0.84'
+    id "com.matthewprenger.cursegradle" version "1.4.0"
 }
-apply plugin: 'net.minecraftforge.gradle'
 apply plugin: "com.matthewprenger.cursegradle"
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply from: 'https://files.saps.dev/ci/git-md-changelog.gradle'
-
-repositories {
-    maven { url = 'https://maven.creeperhost.net/' }
-    maven { url "https://www.cursemaven.com" }
-}
 
 def ENV = System.getenv()
 version = "${minecraft_version}-${mod_version}-build.${ENV.GITHUB_RUN_NUMBER ?: 9999}"
 group = 'com.flanks255'
-archivesBaseName = 'simplygraves'
+base {
+    archivesName = 'simplygraves'
+}
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    mappings channel: "$mappings_channel", version: "$mappings_version"
+//minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg') //The file is empty, so this is commented out
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+runs {
+    // applies to all the run configs below
+    configureEach {
+        //Limit ram usage for the dev environment to 4GB
+        jvmArgument '-Xmx4G'
 
-    runs {
-        client {
-            workingDirectory project.file('run')
+        modSource project.sourceSets.main
+    }
 
-            property 'forge.enabledGameTestNamespaces', 'simplygraves'
+    client {
+        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+        systemProperty 'neoforge.enabledGameTestNamespaces', "simplygraves"
+    }
 
-            mods {
-                simplygraves {
-                    source sourceSets.main
-                }
-            }
-        }
+    server {
+        systemProperty 'neoforge.enabledGameTestNamespaces', "simplygraves"
+        programArgument '--nogui'
+    }
 
-        server {
-            workingDirectory project.file('run')
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', "simplygraves"
+    }
 
-            property 'forge.enabledGameTestNamespaces', 'simplygraves'
-            args 'nogui'
+    data {
+        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+        // workingDirectory project.file('run-data')
 
-            mods {
-                simplygraves {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            workingDirectory project.file('run')
-
-            property 'forge.enabledGameTestNamespaces', 'simplygraves'
-
-            mods {
-                simplygraves {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            args '--mod', 'simplygraves', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                simplygraves {
-                    source sourceSets.main
-                }
-            }
-        }
+        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+        programArguments.addAll '--mod', "simplygraves", '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
     }
 }
 
@@ -98,16 +56,18 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven { url = 'https://maven.creeperhost.net/' }
+    maven { url "https://www.cursemaven.com" }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
+    implementation "net.neoforged:neoforge:$neo_version"
 
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}") //new
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}" //new
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
-    compileOnly fg.deobf("curse.maven:TOP-245211:4629624")
+//    compileOnly "curse.maven:TOP-245211:4629624"
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -160,8 +120,8 @@ if (ENV.CURSEFORGE_KEY) {
         project {
             id = project.curseforge_id
             releaseType = "release"
-            addGameVersion "Forge"
-            addGameVersion "1.20.1"
+            addGameVersion "NeoForge"
+            addGameVersion "1.20.4"
             mainArtifact(jar)
             changelog = getGitChangelog
             changelogType = 'markdown'

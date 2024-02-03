@@ -1,6 +1,6 @@
 package com.flanks255.simplygraves.data;
 
-import net.minecraftforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public class Generator {
     public static void gatherData(GatherDataEvent event) {

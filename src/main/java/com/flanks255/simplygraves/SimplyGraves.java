@@ -11,18 +11,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 import java.util.HashSet;
@@ -40,12 +39,10 @@ public class SimplyGraves
     public static final TagKey<Block> FTBCHUNKS = TagKey.create(Registries.BLOCK, new ResourceLocation("ftbchunks", "interact_whitelist"));
     public static final TagKey<Block> GAIA_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation("botania", "gaia_break_blacklist"));
     public static final TagKey<Block> GRAVES = TagKey.create(Registries.BLOCK, new ResourceLocation("simplygraves", "graves"));
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SimplyGraves.MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(SimplyGraves.MODID);
 
-    public SimplyGraves()
+    public SimplyGraves(IEventBus bus)
     {
-        var bus = FMLJavaModLoadingContext.get().getModEventBus();
-
         SGBlocks.init(bus);
         ITEMS.register(bus);
 
@@ -57,8 +54,8 @@ public class SimplyGraves
             bus.addListener(EntityRenders::registerEntityRenderers);
         }
 
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, DropEvent::Event);
-        MinecraftForge.EVENT_BUS.addListener(this::commandsRegister);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, DropEvent::Event);
+        NeoForge.EVENT_BUS.addListener(this::commandsRegister);
     }
 
     private void setup(final FMLCommonSetupEvent event)

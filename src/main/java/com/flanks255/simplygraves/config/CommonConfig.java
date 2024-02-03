@@ -1,14 +1,14 @@
 package com.flanks255.simplygraves.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class CommonConfig {
-    public static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-    public static ForgeConfigSpec COMMON_CONFIG;
+    public static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
+    public static ModConfigSpec COMMON_CONFIG;
 
-    public static ForgeConfigSpec.BooleanValue DEFAULT_GRAVE_OPTION;
-    public static ForgeConfigSpec.BooleanValue OPERATOR_ONLY;
-    public static ForgeConfigSpec.IntValue DELAY_TO_PUBLIC;
+    public static ModConfigSpec.BooleanValue DEFAULT_GRAVE_OPTION;
+    public static ModConfigSpec.BooleanValue OPERATOR_ONLY;
+    public static ModConfigSpec.IntValue DELAY_TO_PUBLIC;
 
     static {
         DEFAULT_GRAVE_OPTION = COMMON_BUILDER.comment("Default grave option for players.")
