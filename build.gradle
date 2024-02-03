@@ -24,7 +24,7 @@ runs {
     // applies to all the run configs below
     configureEach {
         //Limit ram usage for the dev environment to 4GB
-        jvmArgument '-Xmx4G'
+        jvmArgument '-Xmx8G'
 
         modSource project.sourceSets.main
     }
