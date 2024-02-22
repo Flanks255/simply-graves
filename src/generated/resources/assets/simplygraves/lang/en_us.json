@@ -11,6 +11,7 @@
   "block.simplygraves.granite_gravestone": "Granite Gravestone",
   "block.simplygraves.gravestone_wood": "Gravestone Wood",
   "block.simplygraves.stone_gravestone": "Stone Gravestone",
+  "simplygraves.cooldown": "Grave cooldown remaining: %s.",
   "simplygraves.failed": "Sorry, your grave failed to place.",
   "simplygraves.latest_grave": "Latest Grave",
   "simplygraves.no_graves": "No graves found.",

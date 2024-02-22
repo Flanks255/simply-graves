@@ -9,6 +9,7 @@ public class CommonConfig {
     public static ForgeConfigSpec.BooleanValue DEFAULT_GRAVE_OPTION;
     public static ForgeConfigSpec.BooleanValue OPERATOR_ONLY;
     public static ForgeConfigSpec.IntValue DELAY_TO_PUBLIC;
+    public static ForgeConfigSpec.IntValue GRAVE_COOLDOWN;
 
     static {
         DEFAULT_GRAVE_OPTION = COMMON_BUILDER.comment("Default grave option for players.")
@@ -17,6 +18,8 @@ public class CommonConfig {
                 .define("operatorOnly", false);
         DELAY_TO_PUBLIC = COMMON_BUILDER.comment("Time delay until a grave becomes public, in seconds.")
                 .defineInRange("publicDelay", 3600, 0 , Integer.MAX_VALUE);
+        GRAVE_COOLDOWN = COMMON_BUILDER.comment("Delay before you can spawn another grave, in seconds.")
+                .defineInRange("graveCooldown", 0, 0, Integer.MAX_VALUE);
 
         COMMON_CONFIG = COMMON_BUILDER.build();
     }

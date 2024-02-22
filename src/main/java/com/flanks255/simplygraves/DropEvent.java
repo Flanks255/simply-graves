@@ -21,6 +21,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,11 +30,21 @@ import java.util.UUID;
 public class DropEvent {
     public static void Event(LivingDropsEvent event) {
         if (event.getEntity() instanceof Player player && !event.getEntity().level.isClientSide) {
-            var pref = PreferenceStorage.get().getPrefs(player.getUUID()).getGraveOption();
-            if(!pref.orElse(CommonConfig.DEFAULT_GRAVE_OPTION.get()))
+            var prefs = PreferenceStorage.get().getPrefs(player.getUUID());
+            long time = System.currentTimeMillis();
+
+            if(!prefs.getGraveOption().orElse(CommonConfig.DEFAULT_GRAVE_OPTION.get()))
                 return;
 
-            if (pref.isEmpty()) {
+            if (time - prefs.getLastGrave() < (CommonConfig.GRAVE_COOLDOWN.get() * 1000)) {
+                var timeLeft = Duration.ofSeconds(CommonConfig.GRAVE_COOLDOWN.get() - ((time - prefs.getLastGrave()) / 1000));
+                player.sendSystemMessage(Component.translatable("simplygraves.cooldown",
+                                timeLeft.toString().substring(2).replaceAll("(\\d[HMS])(?!$)", "$1 ").toLowerCase())
+                        .withStyle(style -> style.withColor(ChatFormatting.RED)));
+                return;
+            }
+
+            if (prefs.getGraveOption().isEmpty()) {
                 player.sendSystemMessage(Component.translatable(CommonConfig.DEFAULT_GRAVE_OPTION.get()?"simplygraves.server_enabled":"simplygraves.server_disabled"));
                 player.sendSystemMessage(Component.translatable("simplygraves.server_choice"));
                 var optInLink = Component.literal("Opt-in");
@@ -69,7 +80,6 @@ public class DropEvent {
 
             UUID uuid = UUID.randomUUID();
             BlockPos pos = player.getOnPos().above();
-            long time = System.currentTimeMillis();
             String name = player.getName().getString();
 
             GraveStorage.get().addGrave(uuid, new GraveData(
@@ -104,6 +114,8 @@ public class DropEvent {
             }
             else
                 failedGrave(player, uuid);
+
+            prefs.setLastGrave(time);
         }
     }
 
