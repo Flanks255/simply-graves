@@ -25,5 +25,6 @@ public class LangGen extends LanguageProvider {
     addMy("not_yours", "Sorry, this grave belongs to %s, please try again later...");
     addMy("latest_grave", "Latest Grave");
     addMy("no_graves", "No graves found.");
+    addMy("cooldown", "Grave cooldown remaining: %s.");
     }
 }
