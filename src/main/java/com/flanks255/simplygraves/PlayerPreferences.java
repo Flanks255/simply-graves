@@ -9,6 +9,8 @@ public class PlayerPreferences {
     private Optional<Boolean> graveOption;
     private final UUID player;
 
+    private long lastGrave;
+
     private PlayerPreferences(CompoundTag nbt) {
         this.player = nbt.getUUID("uuid");
 
@@ -16,11 +18,17 @@ public class PlayerPreferences {
             graveOption = Optional.of(nbt.getBoolean("graveoption"));
         else
             graveOption = Optional.empty();
+
+        if (nbt.contains("lastGrave"))
+            lastGrave = nbt.getLong("lastGrave");
+        else
+            lastGrave = 0;
     }
 
     public PlayerPreferences(UUID player) {
         this.player = player;
         this.graveOption = Optional.empty();
+        this.lastGrave = 0;
     }
 
     public static PlayerPreferences of( CompoundTag nbt) {
@@ -32,7 +40,7 @@ public class PlayerPreferences {
 
         nbt.putUUID("uuid", player);
         graveOption.ifPresent($ -> nbt.putBoolean("graveoption", $));
-
+        nbt.putLong("lastGrave", lastGrave);
         return nbt;
     }
 
@@ -44,5 +52,13 @@ public class PlayerPreferences {
     }
     public void setGraveOption(boolean option) {
         graveOption = Optional.of(option);
+    }
+
+    public long getLastGrave() {
+        return lastGrave;
+    }
+
+    public void setLastGrave(long time) {
+        lastGrave = time;
     }
 }
