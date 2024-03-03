@@ -26,6 +26,7 @@ public class BlockTagGen extends BlockTagsProvider {
             tag(SimplyGraves.FTBCHUNKS).add(b.get());
             tag(SimplyGraves.GAIA_BLOCK).add(b.get());
             tag(SimplyGraves.GRAVES).add(b.get());
+            tag(SimplyGraves.CADMUS).add(b.get());
         });
     }
 }

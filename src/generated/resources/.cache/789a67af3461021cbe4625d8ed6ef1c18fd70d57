@@ -1,5 +1,6 @@
-// 1.20.4	2024-02-01T21:30:34.9935126	Tags for minecraft:block mod id simplygraves
+// 1.20.4	2024-03-01T16:14:08.442498	Tags for minecraft:block mod id simplygraves
 f199154d56639bcbc2343e8f019fd279b3859bd9 data/botania/tags/blocks/gaia_break_blacklist.json
+f199154d56639bcbc2343e8f019fd279b3859bd9 data/cadmus/tags/blocks/allows_claim_interaction.json
 f199154d56639bcbc2343e8f019fd279b3859bd9 data/ftbchunks/tags/blocks/interact_whitelist.json
 f199154d56639bcbc2343e8f019fd279b3859bd9 data/minecraft/tags/blocks/dragon_immune.json
 f199154d56639bcbc2343e8f019fd279b3859bd9 data/minecraft/tags/blocks/wither_immune.json

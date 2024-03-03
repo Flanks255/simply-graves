@@ -37,6 +37,7 @@ public class SimplyGraves
     public static final TagKey<Item> NO_GRAVE = TagKey.create(Registries.ITEM, new ResourceLocation("simplygraves", "no_grave"));
 
     public static final TagKey<Block> FTBCHUNKS = TagKey.create(Registries.BLOCK, new ResourceLocation("ftbchunks", "interact_whitelist"));
+    public static final TagKey<Block> CADMUS = TagKey.create(Registries.BLOCK, new ResourceLocation("cadmus", "allows_claim_interaction"));
     public static final TagKey<Block> GAIA_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation("botania", "gaia_break_blacklist"));
     public static final TagKey<Block> GRAVES = TagKey.create(Registries.BLOCK, new ResourceLocation("simplygraves", "graves"));
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(SimplyGraves.MODID);
