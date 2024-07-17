@@ -1,6 +1,7 @@
 package com.flanks255.simplygraves;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -32,7 +33,7 @@ public class GraveData implements Comparable<GraveData>{
         this.failed = failed;
     }
 
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
 
         tag.putUUID("PlayerUUID", this.playerUUID);
@@ -45,13 +46,13 @@ public class GraveData implements Comparable<GraveData>{
         tag.putString("Dim", this.dim.location().toString());
 
         tag.putLong("DeathTime", this.deathTime);
-        tag.put("Inventory", this.inventory.serializeNBT());
+        tag.put("Inventory", this.inventory.serializeNBT(provider));
         tag.putBoolean("Failed", this.failed);
 
         return tag;
     }
 
-    public static GraveData deserializeNBT(CompoundTag nbt) {
+    public static GraveData deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         UUID playerUUID = nbt.getUUID("PlayerUUID");
         String playerName = nbt.getString("PlayerName");
         UUID graveUUID = nbt.getUUID("GraveUUID");
@@ -59,14 +60,14 @@ public class GraveData implements Comparable<GraveData>{
         int x = nbt.getInt("X");
         int y = nbt.getInt("Y");
         int z = nbt.getInt("Z");
-        ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(nbt.getString("Dim")));
+        ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(nbt.getString("Dim")));
 
         BlockPos blockPos = new BlockPos(x, y, z);
 
         long deathTime = nbt.getLong("DeathTime");
 
         ItemStackHandler inventory = new ItemStackHandler();
-        inventory.deserializeNBT(nbt.getCompound("Inventory"));
+        inventory.deserializeNBT(provider, nbt.getCompound("Inventory"));
 
         boolean failed = false;
         if (nbt.contains("Failed"))

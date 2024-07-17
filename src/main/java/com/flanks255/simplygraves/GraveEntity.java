@@ -2,11 +2,12 @@ package com.flanks255.simplygraves;
 
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,8 +48,8 @@ public class GraveEntity extends BlockEntity {
 
     // bulk sync
     @Override
-    public @NotNull CompoundTag getUpdateTag() {
-        var tag = super.getUpdateTag();
+    public CompoundTag getUpdateTag(@Nonnull HolderLookup.Provider registries) {
+        var tag = super.getUpdateTag(registries);
 
         tag.putUUID("UUID", uuid);
         tag.putUUID("playerUUID", player);
@@ -59,8 +60,8 @@ public class GraveEntity extends BlockEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
+    public void handleUpdateTag(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider registries) {
+        super.handleUpdateTag(tag, registries);
 
         uuid = tag.getUUID("UUID");
         player = tag.getUUID("playerUUID");
@@ -68,20 +69,20 @@ public class GraveEntity extends BlockEntity {
         deathTime = tag.getLong("DeathTime");
     }
 
-    //save/load
+/*    //save/load
     @Override
-    public void load(@NotNull CompoundTag pTag) {
+    public void load(CompoundTag pTag, HolderLookup.Provider registries) {
         super.load(pTag);
 
         uuid = pTag.getUUID("UUID");
         player = pTag.getUUID("playerUUID");
         playerName = pTag.getString("PlayerName");
         deathTime = pTag.getLong("DeathTime");
-    }
+    }*/
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag pTag) {
-        super.saveAdditional(pTag);
+    protected void saveAdditional(@Nonnull CompoundTag pTag, @Nonnull HolderLookup.Provider registries) {
+        super.saveAdditional(pTag, registries);
 
         pTag.putUUID("UUID", uuid);
         pTag.putUUID("playerUUID", player);

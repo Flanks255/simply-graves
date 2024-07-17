@@ -2,6 +2,7 @@ package com.flanks255.simplygraves.WSD;
 
 import com.flanks255.simplygraves.GraveData;
 import com.flanks255.simplygraves.SimplyGraves;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -20,22 +22,23 @@ public class GraveStorage extends SavedData {
     private static final HashMap<UUID, GraveData> data = new HashMap<>();
     private static GraveStorage INSTANCE = null;
 
+    @Nonnull
     @Override
-    public CompoundTag save(CompoundTag pCompoundTag) {
+    public CompoundTag save(CompoundTag pCompoundTag, HolderLookup.Provider provider) {
         ListTag list = new ListTag();
-        data.forEach((uuid, grave) -> list.add(grave.serializeNBT()));
+        data.forEach((uuid, grave) -> list.add(grave.serializeNBT(provider)));
 
         pCompoundTag.put("Graves", list);
         return pCompoundTag;
     }
 
-    public static GraveStorage load(CompoundTag pCompoundTag) {
+    public static GraveStorage load(CompoundTag pCompoundTag, HolderLookup.Provider provider) {
         if (pCompoundTag.contains("Graves")) {
             ListTag list = pCompoundTag.getList("Graves", Tag.TAG_COMPOUND);
 
             list.forEach(tag -> {
                 CompoundTag graveTag = (CompoundTag) tag;
-                data.put(graveTag.getUUID("GraveUUID"), GraveData.deserializeNBT(graveTag));
+                data.put(graveTag.getUUID("GraveUUID"), GraveData.deserializeNBT(provider, graveTag));
             });
         }
 
@@ -83,6 +86,10 @@ public class GraveStorage extends SavedData {
 
     public void setFailed(UUID uuid) {
         data.get(uuid).failed = true;
+        setDirty();
+    }
+    public void setSuccess(UUID uuid) {
+        data.get(uuid).failed = false;
         setDirty();
     }
 }

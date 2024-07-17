@@ -2,6 +2,7 @@ package com.flanks255.simplygraves.WSD;
 
 import com.flanks255.simplygraves.PlayerPreferences;
 import com.flanks255.simplygraves.SimplyGraves;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -9,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -17,8 +19,9 @@ public class PreferenceStorage extends SavedData {
     private static final HashMap<UUID, PlayerPreferences> data = new HashMap<>();
     private static PreferenceStorage INSTANCE = null;
 
+    @Nonnull
     @Override
-    public CompoundTag save(CompoundTag pCompoundTag) {
+    public CompoundTag save(CompoundTag pCompoundTag, HolderLookup.Provider provider) {
         ListTag list = new ListTag();
         data.forEach((uuid, pref) -> list.add(pref.save()));
 
@@ -26,7 +29,7 @@ public class PreferenceStorage extends SavedData {
         return pCompoundTag;
     }
 
-    public static PreferenceStorage load(CompoundTag nbt){
+    public static PreferenceStorage load(CompoundTag nbt, HolderLookup.Provider provider){
         if (nbt.contains("Prefs")) {
             ListTag list = nbt.getList("Prefs", Tag.TAG_COMPOUND);
 

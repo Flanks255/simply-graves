@@ -12,15 +12,14 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.bus.api.EventPriority;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
@@ -34,24 +33,24 @@ public class SimplyGraves
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MODID = "simplygraves";
 
-    public static final TagKey<Item> NO_GRAVE = TagKey.create(Registries.ITEM, new ResourceLocation("simplygraves", "no_grave"));
+    public static final TagKey<Item> NO_GRAVE = TagKey.create(Registries.ITEM, rl("simplygraves", "no_grave"));
 
-    public static final TagKey<Block> FTBCHUNKS = TagKey.create(Registries.BLOCK, new ResourceLocation("ftbchunks", "interact_whitelist"));
-    public static final TagKey<Block> CADMUS = TagKey.create(Registries.BLOCK, new ResourceLocation("cadmus", "allows_claim_interaction"));
-    public static final TagKey<Block> GAIA_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation("botania", "gaia_break_blacklist"));
-    public static final TagKey<Block> GRAVES = TagKey.create(Registries.BLOCK, new ResourceLocation("simplygraves", "graves"));
+    public static final TagKey<Block> FTBCHUNKS = TagKey.create(Registries.BLOCK, rl("ftbchunks", "interact_whitelist"));
+    public static final TagKey<Block> CADMUS = TagKey.create(Registries.BLOCK, rl("cadmus", "allows_claim_interaction"));
+    public static final TagKey<Block> GAIA_BLOCK = TagKey.create(Registries.BLOCK, rl("botania", "gaia_break_blacklist"));
+    public static final TagKey<Block> GRAVES = TagKey.create(Registries.BLOCK, rl("simplygraves", "graves"));
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(SimplyGraves.MODID);
 
-    public SimplyGraves(IEventBus bus)
+    public SimplyGraves(IEventBus bus, ModContainer container, Dist dist)
     {
         SGBlocks.init(bus);
         ITEMS.register(bus);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG);
+        container.registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_CONFIG);
 
         bus.addListener(this::setup);
         bus.addListener(Generator::gatherData);
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (dist == Dist.CLIENT) {
             bus.addListener(EntityRenders::registerEntityRenderers);
         }
 
@@ -78,5 +77,12 @@ public class SimplyGraves
             list.add("[No graves]");
 
         return list;
+    }
+
+    public static ResourceLocation rl(String path) {
+        return ResourceLocation.fromNamespaceAndPath(SimplyGraves.MODID, path);
+    }
+    public static ResourceLocation rl(String namespace, String path) {
+        return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
 }

@@ -50,8 +50,8 @@ public class GraveBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(@Nonnull BlockState pState, Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull InteractionHand pHand, @Nonnull BlockHitResult pHit) {
-        if (!pLevel.isClientSide() && !pPlayer.isCrouching() && pHand == InteractionHand.MAIN_HAND && pLevel.getBlockState(pPos).hasBlockEntity() && pLevel.getBlockEntity(pPos) instanceof GraveEntity entity) {
+    public @NotNull InteractionResult useWithoutItem(@Nonnull BlockState pState, Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull BlockHitResult pHit) {
+        if (!pLevel.isClientSide() && !pPlayer.isCrouching() && pPlayer.getUsedItemHand() == InteractionHand.MAIN_HAND && pLevel.getBlockState(pPos).hasBlockEntity() && pLevel.getBlockEntity(pPos) instanceof GraveEntity entity) {
             UUID playerUUID = pPlayer.getUUID();
             entity.getUUID().ifPresent(uuid -> {
                 var storage = GraveStorage.get();
@@ -80,8 +80,7 @@ public class GraveBlock extends Block implements EntityBlock {
                 });
             });
         }
-
-        return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHit);
     }
     @Override
     public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {

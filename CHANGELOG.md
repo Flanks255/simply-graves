@@ -1,3 +1,7 @@
+### [ 1.1.2+mc1.21 ]
+- Ported to 1.21
+- Changed versioning.
+
 ### [ 1.20.4 / 1.1.2 ]
 - Added block tag to allow graves to be collected in cadmus claims.
 - Fixed grave placement logic.

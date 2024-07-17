@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -92,29 +91,28 @@ public class DropEvent {
                     player.level().dimension(),
                     time,
                     inventory,
-                    false
+                    true
             ));
 
             Level level = player.level();
             BlockPos gravePos = search(level, pos);
             boolean replaceable = valid(level, gravePos);
+
+            boolean failedFlag = true;
+
             if (replaceable) {
                 DeferredBlock<GraveBlock> block = SGBlocks.GRAVES.get(event.getEntity().level().random.nextInt(SGBlocks.GRAVES.size()));
                 BlockState state = block.get().defaultBlockState();
                 if (level.setBlock(gravePos, state, 3)) {
                     if(level.getBlockState(gravePos).hasBlockEntity() && level.getBlockEntity(gravePos) instanceof GraveEntity entity) {
                         SimplyGraves.LOGGER.info("Grave placed @ " + gravePos);
-                        successGrave(player, uuid, gravePos, level.dimension().location().getPath());
                         entity.setGrave(uuid, player.getUUID(), name, time);
-                    }
-                    else {
-                        failedGrave(player, uuid);
+                        failedFlag = false;
+                        successGrave(player, uuid, gravePos, level.dimension().location().getPath());
                     }
                 }
-                else
-                    failedGrave(player, uuid);
             }
-            else
+            if (failedFlag)
                 failedGrave(player, uuid);
 
             prefs.setLastGrave(time);
@@ -122,6 +120,7 @@ public class DropEvent {
     }
 
     private static void successGrave(Player player, UUID graveUUID, BlockPos pos, String dim) {
+        GraveStorage.get().setSuccess(graveUUID);
         player.sendSystemMessage(Component.translatable("simplygraves.success",
                 Component.literal(pos.toShortString()).withStyle(style -> style.withColor(ChatFormatting.GREEN)),
                 Component.literal(dim).withStyle(style -> style.withColor(ChatFormatting.GREEN)),
