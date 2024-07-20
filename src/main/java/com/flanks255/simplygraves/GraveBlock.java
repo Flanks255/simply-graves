@@ -53,7 +53,7 @@ public class GraveBlock extends Block implements EntityBlock {
     public @NotNull InteractionResult useWithoutItem(@Nonnull BlockState pState, Level pLevel, @Nonnull BlockPos pPos, @Nonnull Player pPlayer, @Nonnull BlockHitResult pHit) {
         if (!pLevel.isClientSide() && !pPlayer.isCrouching() && pPlayer.getUsedItemHand() == InteractionHand.MAIN_HAND && pLevel.getBlockState(pPos).hasBlockEntity() && pLevel.getBlockEntity(pPos) instanceof GraveEntity entity) {
             UUID playerUUID = pPlayer.getUUID();
-            entity.getUUID().ifPresent(uuid -> {
+            entity.getUUID().ifPresentOrElse(uuid -> {
                 var storage = GraveStorage.get();
                     if (storage.getGrave(uuid).isEmpty()) {
                         storage.removeGrave(uuid);
@@ -78,6 +78,10 @@ public class GraveBlock extends Block implements EntityBlock {
                     pLevel.removeBlock(pPos, false);
                     pLevel.levelEvent(2001, pPos, Block.getId(pState));
                 });
+            }, () -> {
+                pLevel.removeBlockEntity(pPos);
+                pLevel.removeBlock(pPos, false);
+                pLevel.levelEvent(2001, pPos, Block.getId(pState));
             });
         }
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHit);

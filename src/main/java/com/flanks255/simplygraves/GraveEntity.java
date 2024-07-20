@@ -37,6 +37,7 @@ public class GraveEntity extends BlockEntity {
         playerName = pPlayerName;
         deathTime = pDeathTime;
         player = playerUUID;
+        setChanged();
     }
 
     public Optional<UUID> getUUID() {
