@@ -1,3 +1,7 @@
+### [ 1.1.3+mc1.21 ]
+- Fixed grave entity data not being saved correctly.
+- Empty graves can now be right-clicked and will be removed.
+
 ### [ 1.1.2+mc1.21 ]
 - Ported to 1.21
 - Changed versioning.
