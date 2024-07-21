@@ -1,3 +1,6 @@
+### [ 1.1.+mc1.21 ]
+- Fixed grave entity data not being loaded correctly.
+
 ### [ 1.1.3+mc1.21 ]
 - Fixed grave entity data not being saved correctly.
 - Empty graves can now be right-clicked and will be removed.

@@ -48,6 +48,7 @@ public class GraveEntity extends BlockEntity {
     }
 
     // bulk sync
+    @Nonnull
     @Override
     public CompoundTag getUpdateTag(@Nonnull HolderLookup.Provider registries) {
         var tag = super.getUpdateTag(registries);
@@ -70,17 +71,6 @@ public class GraveEntity extends BlockEntity {
         deathTime = tag.getLong("DeathTime");
     }
 
-/*    //save/load
-    @Override
-    public void load(CompoundTag pTag, HolderLookup.Provider registries) {
-        super.load(pTag);
-
-        uuid = pTag.getUUID("UUID");
-        player = pTag.getUUID("playerUUID");
-        playerName = pTag.getString("PlayerName");
-        deathTime = pTag.getLong("DeathTime");
-    }*/
-
     @Override
     protected void saveAdditional(@Nonnull CompoundTag pTag, @Nonnull HolderLookup.Provider registries) {
         super.saveAdditional(pTag, registries);
@@ -89,5 +79,15 @@ public class GraveEntity extends BlockEntity {
         pTag.putUUID("playerUUID", player);
         pTag.putString("PlayerName", playerName);
         pTag.putLong("DeathTime", deathTime);
+    }
+
+    @Override
+    protected void loadAdditional(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+
+        uuid = tag.getUUID("UUID");
+        player = tag.getUUID("playerUUID");
+        playerName = tag.getString("PlayerName");
+        deathTime = tag.getLong("DeathTime");
     }
 }
