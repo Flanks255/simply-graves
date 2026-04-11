@@ -44,7 +44,7 @@ public class SGBlocks {
             END_STONE_GRAVESTONE,
             BLACKSTONE_GRAVESTONE
     );
-    public static final Supplier<BlockEntityType<GraveEntity>> GRAVE_ENTITY = BLOCK_ENTITIES.register("grave", () -> BlockEntityType.Builder.of(GraveEntity::new,
+    public static final Supplier<BlockEntityType<GraveEntity>> GRAVE_ENTITY = BLOCK_ENTITIES.register("grave", () -> new BlockEntityType<>(GraveEntity::new,
             GRAVESTONE.get(),
             ANDESITE_GRAVESTONE.get(),
             BASSALT_GRAVESTONE.get(),
@@ -57,7 +57,7 @@ public class SGBlocks {
             STONE_GRAVESTONE.get(),
             END_STONE_GRAVESTONE.get(),
             BLACKSTONE_GRAVESTONE.get()
-            ).build(null));
+            ));
 
     public static void init(IEventBus bus) {
         BLOCKS.register(bus);

@@ -4,8 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +43,7 @@ public class GraveData implements Comparable<GraveData>{
         tag.putInt("X", this.blockPos.getX());
         tag.putInt("Y", this.blockPos.getY());
         tag.putInt("Z", this.blockPos.getZ());
-        tag.putString("Dim", this.dim.location().toString());
+        tag.putString("Dim", this.dim.identifier().toString());
 
         tag.putLong("DeathTime", this.deathTime);
         tag.put("Inventory", this.inventory.serializeNBT(provider));
@@ -60,7 +60,7 @@ public class GraveData implements Comparable<GraveData>{
         int x = nbt.getInt("X");
         int y = nbt.getInt("Y");
         int z = nbt.getInt("Z");
-        ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(nbt.getString("Dim")));
+        ResourceKey<Level> dim = ResourceKey.create(Registries.DIMENSION, Identifier.parse(nbt.getString("Dim")));
 
         BlockPos blockPos = new BlockPos(x, y, z);
 

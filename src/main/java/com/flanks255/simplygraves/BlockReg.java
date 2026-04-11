@@ -36,7 +36,7 @@ public class BlockReg<B extends Block, I extends Item, T extends BlockEntity> im
         this.name = name;
         block = SGBlocks.BLOCKS.register(name, blockSupplier);
         item = SimplyGraves.ITEMS.register(name, () -> itemSupplier.apply(block.get()));
-        tile = SGBlocks.BLOCK_ENTITIES.register(name, () -> BlockEntityType.Builder.of(tileSupplier, block.get()).build(null));
+        tile = SGBlocks.BLOCK_ENTITIES.register(name, () -> new BlockEntityType<>(tileSupplier, block.get()));
     }
 
     public B getBlock() {

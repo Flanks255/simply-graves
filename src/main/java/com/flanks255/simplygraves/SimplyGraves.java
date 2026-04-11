@@ -7,7 +7,7 @@ import com.flanks255.simplygraves.data.Generator;
 import com.flanks255.simplygraves.render.EntityRenders;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -79,10 +79,10 @@ public class SimplyGraves
         return list;
     }
 
-    public static ResourceLocation rl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(SimplyGraves.MODID, path);
+    public static Identifier rl(String path) {
+        return Identifier.fromNamespaceAndPath(SimplyGraves.MODID, path);
     }
-    public static ResourceLocation rl(String namespace, String path) {
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
+    public static Identifier rl(String namespace, String path) {
+        return Identifier.fromNamespaceAndPath(namespace, path);
     }
 }

@@ -30,7 +30,7 @@ import java.util.UUID;
 
 public class DropEvent {
     public static void Event(LivingDropsEvent event) {
-        if (event.getEntity() instanceof Player player && !event.getEntity().level().isClientSide) {
+        if (event.getEntity() instanceof Player player && !event.getEntity().level().isClientSide()) {
             var prefs = PreferenceStorage.get().getPrefs(player.getUUID());
             long time = System.currentTimeMillis();
 
@@ -50,14 +50,14 @@ public class DropEvent {
                 player.sendSystemMessage(Component.translatable("simplygraves.server_choice"));
                 var optInLink = Component.literal("Opt-in");
                 optInLink.withStyle(style -> style
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sg option enable"))
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Enable Graves")))
+                        .withClickEvent(new ClickEvent.SuggestCommand("/sg option enable"))
+                        .withHoverEvent(new HoverEvent.ShowText(Component.literal("Enable Graves")))
                         .withColor(ChatFormatting.GREEN)
                         .withUnderlined(true));
                 var optOutLink = Component.literal("Opt-out");
                 optOutLink.withStyle(style -> style
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sg option disable"))
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Disable Graves")))
+                        .withClickEvent(new ClickEvent.SuggestCommand("/sg option disable"))
+                        .withHoverEvent(new HoverEvent.ShowText(Component.literal("Disable Graves")))
                         .withColor(ChatFormatting.GREEN)
                         .withUnderlined(true));
                 player.sendSystemMessage(Component.literal("[").append(optInLink).append("] - [").append(optOutLink).append("]"));
@@ -101,14 +101,14 @@ public class DropEvent {
             boolean failedFlag = true;
 
             if (replaceable) {
-                DeferredBlock<GraveBlock> block = SGBlocks.GRAVES.get(event.getEntity().level().random.nextInt(SGBlocks.GRAVES.size()));
+                DeferredBlock<GraveBlock> block = SGBlocks.GRAVES.get(event.getEntity().level().getRandom().nextInt(SGBlocks.GRAVES.size()));
                 BlockState state = block.get().defaultBlockState();
                 if (level.setBlock(gravePos, state, 3)) {
                     if(level.getBlockState(gravePos).hasBlockEntity() && level.getBlockEntity(gravePos) instanceof GraveEntity entity) {
                         SimplyGraves.LOGGER.info("Grave placed @ " + gravePos);
                         entity.setGrave(uuid, player.getUUID(), name, time);
                         failedFlag = false;
-                        successGrave(player, uuid, gravePos, level.dimension().location().getPath());
+                        successGrave(player, uuid, gravePos, level.dimension().identifier().getPath());
                     }
                 }
             }
@@ -133,8 +133,8 @@ public class DropEvent {
         GraveStorage.get().setFailed(graveUUID);
         var recover = Component.literal("Recover");
         recover.withStyle(style -> style
-                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sg failed"))
-                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Recover failed grave")))
+                .withClickEvent(new ClickEvent.RunCommand("/sg failed"))
+                .withHoverEvent(new HoverEvent.ShowText(Component.literal("Recover failed grave")))
                 .withColor(ChatFormatting.GREEN)
                 .withUnderlined(true));
         player.sendSystemMessage(Component.translatable("simplygraves.failed"));

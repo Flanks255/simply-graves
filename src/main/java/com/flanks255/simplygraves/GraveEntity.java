@@ -1,11 +1,13 @@
 package com.flanks255.simplygraves;
 
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -15,8 +17,8 @@ public class GraveEntity extends BlockEntity {
     public GraveEntity(BlockPos pWorldPosition, BlockState pBlockState) {
         super(SGBlocks.GRAVE_ENTITY.get(), pWorldPosition, pBlockState);
     }
-    private UUID uuid = Util.NIL_UUID;
-    private UUID player = Util.NIL_UUID;
+    private UUID uuid;
+    private UUID player;
     private String playerName = "";
     private long deathTime = 0;
 
@@ -41,7 +43,7 @@ public class GraveEntity extends BlockEntity {
     }
 
     public Optional<UUID> getUUID() {
-        if (uuid == Util.NIL_UUID || uuid == null) {
+        if (uuid == null) {
             return Optional.empty();
         }
         return Optional.of(uuid);
@@ -53,41 +55,46 @@ public class GraveEntity extends BlockEntity {
     public CompoundTag getUpdateTag(@Nonnull HolderLookup.Provider registries) {
         var tag = super.getUpdateTag(registries);
 
-        tag.putUUID("UUID", uuid);
-        tag.putUUID("playerUUID", player);
+        tag.putLong("UUIDM", uuid.getMostSignificantBits());
+        tag.putLong("UUIDL", uuid.getLeastSignificantBits());
+        tag.putLong("playerUUIDM", player.getMostSignificantBits());
+        tag.putLong("playerUUIDL", player.getLeastSignificantBits());
         tag.putString("PlayerName", playerName);
         tag.putLong("DeathTime", deathTime);
 
         return tag;
     }
 
-    @Override
-    public void handleUpdateTag(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider registries) {
-        super.handleUpdateTag(tag, registries);
 
-        uuid = tag.getUUID("UUID");
-        player = tag.getUUID("playerUUID");
-        playerName = tag.getString("PlayerName");
-        deathTime = tag.getLong("DeathTime");
+    @Override
+    public void handleUpdateTag(@NotNull ValueInput tag) {
+        super.handleUpdateTag(tag);
+
+        uuid = new UUID(tag.getLongOr("UUIDM",0), tag.getLongOr("UUIDL",0));
+        player = new UUID(tag.getLongOr("playerUUIDM",0), tag.getLongOr("playerUUIDL",0));
+        playerName = tag.getStringOr("PlayerName","");
+        deathTime = tag.getLongOr("DeathTime",0);
     }
 
     @Override
-    protected void saveAdditional(@Nonnull CompoundTag pTag, @Nonnull HolderLookup.Provider registries) {
-        super.saveAdditional(pTag, registries);
+    protected void loadAdditional(@NotNull ValueInput input) {
+        super.loadAdditional(input);
 
-        pTag.putUUID("UUID", uuid);
-        pTag.putUUID("playerUUID", player);
-        pTag.putString("PlayerName", playerName);
-        pTag.putLong("DeathTime", deathTime);
+        uuid = new UUID(input.getLongOr("UUIDM", 0), input.getLongOr("UUIDL", 0));
+        player = new UUID(input.getLongOr("playerUUIDM", 0), input.getLongOr("playerUUIDL", 0));
+        playerName = input.getStringOr("PlayerName", "");
+        deathTime = input.getLongOr("DeathTime", 0);
     }
 
     @Override
-    protected void loadAdditional(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void saveAdditional(@NotNull ValueOutput output) {
+        super.saveAdditional(output);
 
-        uuid = tag.getUUID("UUID");
-        player = tag.getUUID("playerUUID");
-        playerName = tag.getString("PlayerName");
-        deathTime = tag.getLong("DeathTime");
+        output.putLong("UUIDM", uuid.getMostSignificantBits());
+        output.putLong("UUIDL", uuid.getLeastSignificantBits());
+        output.putLong("playerUUIDM", player.getMostSignificantBits());
+        output.putLong("playerUUIDL", player.getLeastSignificantBits());
+        output.putString("PlayerName", playerName);
+        output.putLong("DeathTime", deathTime);
     }
 }
