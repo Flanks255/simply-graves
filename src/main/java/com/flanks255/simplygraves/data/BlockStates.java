@@ -3,8 +3,7 @@ package com.flanks255.simplygraves.data;
 import com.flanks255.simplygraves.SGBlocks;
 import com.flanks255.simplygraves.SimplyGraves;
 import net.minecraft.data.DataGenerator;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public class BlockStates extends BlockStateProvider {
     public BlockStates(DataGenerator gen, ExistingFileHelper exFileHelper) {

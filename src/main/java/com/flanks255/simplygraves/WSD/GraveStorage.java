@@ -28,9 +28,8 @@ public class GraveStorage extends SavedData {
     private static GraveStorage INSTANCE = null;
 
     public static final SavedDataType<GraveStorage> TYPE = new SavedDataType<>(NAME, GraveStorage::new,
-            RecordCodecBuilder.create(
 
-    @Nonnull
+/*    @Nonnull
     @Override
     public CompoundTag save(CompoundTag pCompoundTag, HolderLookup.Provider provider) {
         ListTag list = new ListTag();
@@ -49,11 +48,11 @@ public class GraveStorage extends SavedData {
         }
 
         return new GraveStorage();
-    }
+    }*/
 
     public static GraveStorage get() {
         if (INSTANCE == null) {
-            INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(GraveStorage::new, GraveStorage::load), NAME);
+            //INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(GraveStorage::new, GraveStorage::load), NAME);
         }
         return INSTANCE;
     }
