@@ -2,57 +2,41 @@ package com.flanks255.simplygraves.WSD;
 
 import com.flanks255.simplygraves.GraveData;
 import com.flanks255.simplygraves.SimplyGraves;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
-import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 public class GraveStorage extends SavedData {
-    private static final String NAME = SimplyGraves.MODID + "_data";
-    private static final HashMap<UUID, GraveData> data = new HashMap<>();
+    private static final Identifier NAME = SimplyGraves.rl("graves");
+    private final HashMap<UUID, GraveData> data = new HashMap<>();
     private static GraveStorage INSTANCE = null;
+    public static final Codec<GraveStorage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.unboundedMap(UUIDUtil.STRING_CODEC, GraveData.CODEC).fieldOf("data").forGetter($ -> $.data))
+            .apply(instance, GraveStorage::new));
 
-    public static final SavedDataType<GraveStorage> TYPE = new SavedDataType<>(NAME, GraveStorage::new,
+    public static final SavedDataType<GraveStorage> TYPE = new SavedDataType<>(NAME, GraveStorage::new, CODEC);
 
-/*    @Nonnull
-    @Override
-    public CompoundTag save(CompoundTag pCompoundTag, HolderLookup.Provider provider) {
-        ListTag list = new ListTag();
-        data.forEach((uuid, grave) -> list.add(grave.serializeNBT(provider)));
-        return pCompoundTag;
+    public GraveStorage() {
     }
 
-    public static GraveStorage load(CompoundTag pCompoundTag, HolderLookup.Provider provider) {
-        if (pCompoundTag.contains("Graves")) {
-            ListTag list = pCompoundTag.getList("Graves", Tag.TAG_COMPOUND);
-
-            list.forEach(tag -> {
-                CompoundTag graveTag = (CompoundTag) tag;
-                data.put(graveTag.getUUID("GraveUUID"), GraveData.deserializeNBT(provider, graveTag));
-            });
-        }
-
-        return new GraveStorage();
-    }*/
+    public GraveStorage(Map<UUID, GraveData> data) {
+        this.data.putAll(data);
+    }
 
     public static GraveStorage get() {
         if (INSTANCE == null) {
-            //INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(new Factory<>(GraveStorage::new, GraveStorage::load), NAME);
+            INSTANCE = ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(TYPE);
         }
         return INSTANCE;
     }

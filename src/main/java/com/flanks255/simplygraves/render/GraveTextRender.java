@@ -85,7 +85,7 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity> {
         matrixStack.scale(0.03F, 0.03F, 0.03F);
 
 
-        Component.literal("test").getVisualOrderText()
+        Component.literal("test").getVisualOrderText();
         nodeCollector.submitText();
 
 
