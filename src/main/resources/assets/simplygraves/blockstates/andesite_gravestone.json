@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "simplygraves:block/gravestone_andesite"
+    },
+    "facing=east": {
+      "model": "simplygraves:block/gravestone_andesite",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "simplygraves:block/gravestone_andesite",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "simplygraves:block/gravestone_andesite",
+      "y": 270
+    }
+  }
+}
