@@ -64,8 +64,6 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity, GraveTe
         drawCenteredString(matrixStack, nodeCollector, Component.literal(state.playerName), -8, 0xffffff);
 
         Component.literal("test").getVisualOrderText();
-        nodeCollector.submitText();
-
 
         matrixStack.popPose();
     }

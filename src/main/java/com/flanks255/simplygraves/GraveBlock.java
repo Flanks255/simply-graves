@@ -3,7 +3,10 @@ package com.flanks255.simplygraves;
 import com.flanks255.simplygraves.WSD.GraveStorage;
 import com.flanks255.simplygraves.config.CommonConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,8 +31,9 @@ import java.util.UUID;
 @SuppressWarnings("deprecation")
 public class GraveBlock extends Block implements EntityBlock {
     public final Grave graveType;
-    public GraveBlock(Grave graveIn) {
+    public GraveBlock(Grave graveIn, Identifier id) {
         super(BlockBehaviour.Properties.of()
+                .setId(ResourceKey.create(Registries.BLOCK, id))
                 .forceSolidOn()
                 .strength(200.0F, 3600000.0F)
                 .pushReaction(PushReaction.BLOCK));

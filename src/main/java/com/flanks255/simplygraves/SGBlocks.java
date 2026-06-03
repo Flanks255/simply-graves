@@ -28,7 +28,7 @@ public class SGBlocks {
     public static final DeferredBlock<GraveBlock> BLACKSTONE_GRAVESTONE = registerGrave(Grave.BLACKSTONE);
 
     private static DeferredBlock<GraveBlock> registerGrave(Grave graveType) {
-        return BLOCKS.register(graveType.regName, () -> new GraveBlock(graveType));
+        return BLOCKS.register(graveType.regName, id -> new GraveBlock(graveType, id));
     }
     public static final List<DeferredBlock<GraveBlock>> GRAVES = ImmutableList.of(
             GRAVESTONE,

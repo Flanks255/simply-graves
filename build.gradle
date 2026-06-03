@@ -80,7 +80,7 @@ dependencies {
     compileOnly "mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}"
 
-    runtimeOnly "curse.maven:JADE-324717:5493270"
+    runtimeOnly "curse.maven:JADE-324717:7886513"
 //    compileOnly "curse.maven:TOP-245211:4629624"
 }
 
