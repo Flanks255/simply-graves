@@ -14,7 +14,7 @@ public class PlayerPreferences {
     private long lastGrave;
 
     public static final Codec<PlayerPreferences> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            UUIDUtil.CODEC.fieldOf("player").forGetter(PlayerPreferences::getPlayer),
+            UUIDUtil.STRING_CODEC.fieldOf("player").forGetter(PlayerPreferences::getPlayer),
             Codec.BOOL.optionalFieldOf("graveOption").forGetter(PlayerPreferences::getGraveOption),
             Codec.LONG.fieldOf("lastGrave").forGetter(PlayerPreferences::getLastGrave)
     ).apply(instance, PlayerPreferences::new));
