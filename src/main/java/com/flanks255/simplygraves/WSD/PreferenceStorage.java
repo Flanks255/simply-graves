@@ -4,32 +4,27 @@ import com.flanks255.simplygraves.PlayerPreferences;
 import com.flanks255.simplygraves.SimplyGraves;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class PreferenceStorage extends SavedData {
-    private static final String NAME = SimplyGraves.MODID + "_prefs";
     private final HashMap<UUID, PlayerPreferences> data = new HashMap<>();
     private static PreferenceStorage INSTANCE = null;
+    public static final Codec<PreferenceStorage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.unboundedMap(UUIDUtil.STRING_CODEC, PlayerPreferences.CODEC).fieldOf("data").forGetter($ -> $.data)
+    ).apply(instance, PreferenceStorage::new));
 
     public static final SavedDataType<PreferenceStorage> TYPE = new SavedDataType<>(
-            NAME,
+            SimplyGraves.rl("prefs"),
             PreferenceStorage::new,
-            RecordCodecBuilder.create(instance -> instance.group(
-                    Codec.unboundedMap(UUIDUtil.STRING_CODEC, PlayerPreferences.CODEC).fieldOf("data").forGetter($ -> $.data)
-            ).apply(instance, PreferenceStorage::new))
+            CODEC
     );
 
 /*    @Nonnull
@@ -41,6 +36,11 @@ public class PreferenceStorage extends SavedData {
         pCompoundTag.put("Prefs", list);
         return pCompoundTag;
     }*/
+
+    public PreferenceStorage(Map<UUID, PlayerPreferences> data) {
+        this.data.putAll(data);
+    }
+    public PreferenceStorage() {}
 
     public HashMap<UUID, PlayerPreferences> getData() {
         return data;
