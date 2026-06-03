@@ -1,28 +1,38 @@
 package com.flanks255.simplygraves;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public class GraveData implements Comparable<GraveData>{
-        public final UUID playerUUID;
-        public final String playerName;
-        public final UUID graveUUID;
-        public BlockPos blockPos;
-        public final ResourceKey<Level> dim;
-        public final long deathTime;
-        public final ItemStackHandler inventory;
-        public boolean failed;
+    public final UUID playerUUID;
+    public final String playerName;
+    public final UUID graveUUID;
+    public BlockPos blockPos;
+    public final ResourceKey<Level> dim;
+    public final long deathTime;
+    public final GraveItemStorage inventory;
+    public boolean failed;
 
-    public GraveData(UUID playerUUID, String playerName, UUID graveUUID, BlockPos blockPos, ResourceKey<Level> dim, long deathTime, ItemStackHandler inventory, boolean failed) {
+    public static final Codec<GraveData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            UUIDUtil.CODEC.fieldOf("PlayerUUID").forGetter(g -> g.playerUUID),
+            Codec.STRING.fieldOf("PlayerName").forGetter(g -> g.playerName),
+            UUIDUtil.CODEC.fieldOf("GraveUUID").forGetter(g -> g.graveUUID),
+            BlockPos.CODEC.fieldOf("BlockPos").forGetter(g -> g.blockPos),
+            ResourceKey.codec(Registries.DIMENSION).fieldOf("Dim").forGetter(g -> g.dim),
+            Codec.LONG.fieldOf("DeathTime").forGetter(g -> g.deathTime),
+            GraveItemStorage.CODEC.fieldOf("Inventory").forGetter(g -> g.inventory),
+            Codec.BOOL.fieldOf("Failed").orElse(false).forGetter(g -> g.failed)
+    ).apply(instance, GraveData::new));
+
+    public GraveData(UUID playerUUID, String playerName, UUID graveUUID, BlockPos blockPos, ResourceKey<Level> dim, long deathTime, GraveItemStorage inventory, boolean failed) {
         this.playerUUID = playerUUID;
         this.playerName = playerName;
         this.graveUUID = graveUUID;
@@ -33,7 +43,7 @@ public class GraveData implements Comparable<GraveData>{
         this.failed = failed;
     }
 
-    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+/*    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
 
         tag.putUUID("PlayerUUID", this.playerUUID);
@@ -75,7 +85,7 @@ public class GraveData implements Comparable<GraveData>{
 
 
         return new GraveData(playerUUID, playerName, graveUUID, blockPos, dim, deathTime, inventory, failed);
-    }
+    }*/
 
     @Override
     public int compareTo(@NotNull GraveData o) {

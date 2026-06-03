@@ -1,6 +1,8 @@
 package com.flanks255.simplygraves;
 
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.UUIDUtil;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -11,11 +13,23 @@ public class PlayerPreferences {
 
     private long lastGrave;
 
-    private PlayerPreferences(CompoundTag nbt) {
+    public static final Codec<PlayerPreferences> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            UUIDUtil.CODEC.fieldOf("player").forGetter(PlayerPreferences::getPlayer),
+            Codec.BOOL.optionalFieldOf("graveOption").forGetter(PlayerPreferences::getGraveOption),
+            Codec.LONG.fieldOf("lastGrave").forGetter(PlayerPreferences::getLastGrave)
+    ).apply(instance, PlayerPreferences::new));
+
+    public PlayerPreferences(UUID player, Optional<Boolean> graveOption, long lastGrave) {
+        this.player = player;
+        this.graveOption = graveOption;
+        this.lastGrave = lastGrave;
+    }
+
+/*    private PlayerPreferences(CompoundTag nbt) {
         this.player = nbt.getUUID("uuid");
 
         if(nbt.contains("graveoption"))
-            graveOption = Optional.of(nbt.getBoolean("graveoption"));
+            graveOption = nbt.getBoolean("graveoption");
         else
             graveOption = Optional.empty();
 
@@ -23,7 +37,7 @@ public class PlayerPreferences {
             lastGrave = nbt.getLong("lastGrave");
         else
             lastGrave = 0;
-    }
+    }*/
 
     public PlayerPreferences(UUID player) {
         this.player = player;
@@ -31,18 +45,18 @@ public class PlayerPreferences {
         this.lastGrave = 0;
     }
 
-    public static PlayerPreferences of( CompoundTag nbt) {
+/*    public static PlayerPreferences of( CompoundTag nbt) {
         return new PlayerPreferences(nbt);
-    }
+    }*/
 
-    public CompoundTag save() {
+/*    public CompoundTag save() {
         CompoundTag nbt = new CompoundTag();
 
         nbt.putUUID("uuid", player);
         graveOption.ifPresent($ -> nbt.putBoolean("graveoption", $));
         nbt.putLong("lastGrave", lastGrave);
         return nbt;
-    }
+    }*/
 
     public UUID getPlayer() {
         return player;

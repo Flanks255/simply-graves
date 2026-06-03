@@ -19,7 +19,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,10 +66,10 @@ public class GraveBlock extends Block implements EntityBlock {
                             return;
                         }
                     var inv = graveData.inventory;
-                    for (int i = 0; i < inv.getSlots(); i++){
-                        var stack = inv.getStackInSlot(i);
-                        if (!stack.isEmpty()) {
-                            ItemHandlerHelper.giveItemToPlayer(pPlayer, stack);
+                    for (int i = 0; i < inv.getCount(); i++){
+                        var stack = inv.getItem(i);
+                        if (!stack.item().isEmpty()) {
+                            pPlayer.getInventory().placeItemBackInInventory(stack.item().copy());
                         }
                     }
                     storage.removeGrave(uuid);
@@ -86,7 +85,7 @@ public class GraveBlock extends Block implements EntityBlock {
         }
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHit);
     }
-    @Override
+    //@Override //TODO
     public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
         //super.onBlockExploded(state, level, pos, explosion);
     }

@@ -18,8 +18,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import java.time.Duration;
@@ -67,12 +65,12 @@ public class DropEvent {
             if (drops.isEmpty()) //No items, don't waste a grave.
                 return;
 
-            ItemStackHandler inventory = new ItemStackHandler(drops.size());
+            var graveInv = new GraveItemStorage();
 
             List<ItemEntity> toRemove = new ArrayList<>();
             drops.forEach(drop -> {
                 if (!drop.getItem().is(SimplyGraves.NO_GRAVE)) {
-                    ItemHandlerHelper.insertItem(inventory, drop.getItem(), false);
+                    graveInv.addItem(drop.getItem(), GraveItemStorage.GraveItem.InventoryType.MAIN, -1);
                     toRemove.add(drop);
                 }
             });
@@ -90,7 +88,7 @@ public class DropEvent {
                     pos,
                     player.level().dimension(),
                     time,
-                    inventory,
+                    graveInv,
                     true
             ));
 

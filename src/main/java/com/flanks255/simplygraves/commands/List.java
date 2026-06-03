@@ -21,7 +21,7 @@ import java.util.Set;
 public class List {
     private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
-        return Commands.literal("list").requires(cs -> cs.hasPermission(1))
+        return Commands.literal("list").requires(Commands.hasPermission(Commands.LEVEL_MODERATORS))
             .executes(cs -> list(cs, ""))
                 .then(Commands.argument("PlayerName", StringArgumentType.string())
                 .suggests((cs, builder) -> SharedSuggestionProvider.suggest(getPlayerSuggestions(cs), builder))

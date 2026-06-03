@@ -28,7 +28,7 @@ public class Last {
 
         lastGrave.ifPresentOrElse(g -> {
             player.sendSystemMessage(Component.translatable("simplygraves.latest_grave"));
-            player.sendSystemMessage(Component.literal(g.dim.location().getPath() + " @ " + g.blockPos.toShortString()));
+            player.sendSystemMessage(Component.literal(g.dim.identifier().getPath() + " @ " + g.blockPos.toShortString()));
             player.sendSystemMessage(Component.literal(SDF.format(new Date(g.deathTime))));
         }, () -> player.sendSystemMessage(Component.translatable("simplygraves.no_graves")));
 

@@ -7,8 +7,14 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +24,9 @@ import java.text.SimpleDateFormat;
 
 public class GraveTextRender implements BlockEntityRenderer<GraveEntity> {
     private static final SimpleDateFormat format = new SimpleDateFormat("mm:ss");
-    public GraveTextRender() {
+    private final Font font;
+    public GraveTextRender(BlockEntityRendererProvider.Context context) {
+        this.font = context.font();
     }
 
     @Override
@@ -62,6 +70,26 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity> {
     private void drawCenteredString(PoseStack matrixStack, Font font, String string, int x, int y, int color, @NotNull MultiBufferSource pBufferSource) {
         float offset = -font.width(string) / 2.0f;
         font.drawInBatch(string, x + offset, y, color, false, matrixStack.last().pose(), pBufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
+    }
+
+    @Override
+    public BlockEntityRenderState createRenderState() {
+        return null;
+    }
+
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack matrixStack, SubmitNodeCollector nodeCollector, CameraRenderState camera) {
+        matrixStack.pushPose();
+        matrixStack.translate(0.5,0.5,0.5);
+        matrixStack.scale(1, -1, 1);
+        matrixStack.scale(0.03F, 0.03F, 0.03F);
+
+
+        Component.literal("test").getVisualOrderText()
+        nodeCollector.submitText();
+
+
+        matrixStack.popPose();
     }
 
     @Override

@@ -19,13 +19,13 @@ public class Option {
         return Commands.literal("option")
                 .executes(Option::getStatus)
 
-                    .then(Commands.literal("enable").requires(cs -> !CommonConfig.OPERATOR_ONLY.get() || cs.hasPermission(1))
+                    .then(Commands.literal("enable").requires(cs -> !CommonConfig.OPERATOR_ONLY.get() || Commands.LEVEL_MODERATORS.check(cs.permissions()))
                             .executes(cs -> setStatus(cs, cs.getSource().getPlayer(), true)))
 
-                    .then(Commands.literal("disable").requires(cs -> !CommonConfig.OPERATOR_ONLY.get() || cs.hasPermission(1))
+                    .then(Commands.literal("disable").requires(cs -> !CommonConfig.OPERATOR_ONLY.get() || Commands.LEVEL_MODERATORS.check(cs.permissions()))
                             .executes(cs -> setStatus(cs, cs.getSource().getPlayer(), false)))
 
-                    .then(Commands.literal("set").requires(cs -> cs.hasPermission(1))
+                    .then(Commands.literal("set").requires(Commands.hasPermission(Commands.LEVEL_MODERATORS))
                             .then(Commands.argument("Player", EntityArgument.player()).suggests((cs, builder) -> SharedSuggestionProvider.suggest(getPlayerSuggestions(cs), builder))
                             .then(Commands.argument("Option", BoolArgumentType.bool())
                                 .executes(cs -> setStatus(cs, EntityArgument.getPlayer(cs, "Player"), BoolArgumentType.getBool(cs, "Option"))))));

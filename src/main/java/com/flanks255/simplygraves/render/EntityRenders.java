@@ -5,6 +5,6 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class EntityRenders {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(SGBlocks.GRAVE_ENTITY.get(), $ -> new GraveTextRender());
+        event.registerBlockEntityRenderer(SGBlocks.GRAVE_ENTITY.get(), GraveTextRender::new);
     }
 }

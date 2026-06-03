@@ -2,13 +2,18 @@ package com.flanks255.simplygraves.WSD;
 
 import com.flanks255.simplygraves.GraveData;
 import com.flanks255.simplygraves.SimplyGraves;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
+import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nonnull;
@@ -22,13 +27,14 @@ public class GraveStorage extends SavedData {
     private static final HashMap<UUID, GraveData> data = new HashMap<>();
     private static GraveStorage INSTANCE = null;
 
+    public static final SavedDataType<GraveStorage> TYPE = new SavedDataType<>(NAME, GraveStorage::new,
+            RecordCodecBuilder.create(
+
     @Nonnull
     @Override
     public CompoundTag save(CompoundTag pCompoundTag, HolderLookup.Provider provider) {
         ListTag list = new ListTag();
         data.forEach((uuid, grave) -> list.add(grave.serializeNBT(provider)));
-
-        pCompoundTag.put("Graves", list);
         return pCompoundTag;
     }
 
