@@ -3,6 +3,7 @@ package com.flanks255.simplygraves;
 import com.flanks255.simplygraves.WSD.GraveStorage;
 import com.flanks255.simplygraves.config.CommonConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -18,6 +19,8 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -38,6 +41,7 @@ public class GraveBlock extends Block implements EntityBlock {
                 .strength(200.0F, 3600000.0F)
                 .pushReaction(PushReaction.BLOCK));
         graveType = graveIn;
+        registerDefaultState(getStateDefinition().any().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
     @Nullable
@@ -92,5 +96,10 @@ public class GraveBlock extends Block implements EntityBlock {
     //@Override //TODO
     public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
         //super.onBlockExploded(state, level, pos, explosion);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(BlockStateProperties.HORIZONTAL_FACING);
     }
 }

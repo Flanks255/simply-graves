@@ -5,6 +5,7 @@ import com.flanks255.simplygraves.WSD.PreferenceStorage;
 import com.flanks255.simplygraves.config.CommonConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -80,6 +82,7 @@ public class DropEvent {
             UUID uuid = UUID.randomUUID();
             BlockPos pos = player.getOnPos().above();
             String name = player.getName().getString();
+            Direction facing = player.getDirection();
 
             GraveStorage.get().addGrave(uuid, new GraveData(
                     player.getUUID(),
@@ -100,7 +103,7 @@ public class DropEvent {
 
             if (replaceable) {
                 DeferredBlock<GraveBlock> block = SGBlocks.GRAVES.get(event.getEntity().level().getRandom().nextInt(SGBlocks.GRAVES.size()));
-                BlockState state = block.get().defaultBlockState();
+                BlockState state = block.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facing);
                 if (level.setBlock(gravePos, state, 3)) {
                     if(level.getBlockState(gravePos).hasBlockEntity() && level.getBlockEntity(gravePos) instanceof GraveEntity entity) {
                         SimplyGraves.LOGGER.info("Grave placed @ " + gravePos);

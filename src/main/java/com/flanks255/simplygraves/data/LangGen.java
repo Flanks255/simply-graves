@@ -26,5 +26,6 @@ public class LangGen extends LanguageProvider {
     addMy("latest_grave", "Latest Grave");
     addMy("no_graves", "No graves found.");
     addMy("cooldown", "Grave cooldown remaining: %s.");
+    addMy("right_click", "Right-click to collect.");
     }
 }

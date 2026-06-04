@@ -16,6 +16,7 @@
   "simplygraves.latest_grave": "Latest Grave",
   "simplygraves.no_graves": "No graves found.",
   "simplygraves.not_yours": "Sorry, this grave belongs to %s, please try again later...",
+  "simplygraves.right_click": "Right-click to collect.",
   "simplygraves.server_choice": "Would you like to use graves in the future?",
   "simplygraves.server_disabled": "The default for graves is currently disabled, and a grave has not been created for this death.",
   "simplygraves.server_enabled": "The default for graves is currently enabled, and a grave has been created for this death.",

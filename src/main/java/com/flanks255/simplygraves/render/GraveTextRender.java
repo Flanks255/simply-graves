@@ -63,7 +63,18 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity, GraveTe
 
         drawCenteredString(matrixStack, nodeCollector, Component.literal(state.playerName), -8, 0xffffff);
 
-        Component.literal("test").getVisualOrderText();
+        if (!state.isMine) {
+            if (state.timeRemaining > 0) {
+                matrixStack.translate(0, -15, 0);
+                matrixStack.scale(0.25f, 0.25f, 0.25f);
+                drawCenteredString(matrixStack, nodeCollector, Component.literal(format.format(state.timeRemaining)), 0, 0xffff00);
+            }
+        }
+        if (state.isMine || state.timeRemaining == 0) {
+            matrixStack.translate(0, -15, 0);
+            matrixStack.scale(0.25f, 0.25f, 0.25f);
+            drawCenteredString(matrixStack, nodeCollector, Component.translatable("simplygraves.right_click"), 0, 0xffffff);
+        }
 
         matrixStack.popPose();
     }
