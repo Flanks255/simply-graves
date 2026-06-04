@@ -2,6 +2,7 @@ package com.flanks255.simplygraves;
 
 import com.flanks255.simplygraves.WSD.GraveStorage;
 import com.flanks255.simplygraves.config.CommonConfig;
+import com.mojang.math.OctahedralGroup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +36,11 @@ import java.util.UUID;
 @SuppressWarnings("deprecation")
 public class GraveBlock extends Block implements EntityBlock {
     public final Grave graveType;
+    public final VoxelShape SHAPE_NORTH;
+    public final VoxelShape SHAPE_EAST;
+    public final VoxelShape SHAPE_SOUTH;
+    public final VoxelShape SHAPE_WEST;
+
     public GraveBlock(Grave graveIn, Identifier id) {
         super(BlockBehaviour.Properties.of()
                 .setId(ResourceKey.create(Registries.BLOCK, id))
@@ -42,6 +49,10 @@ public class GraveBlock extends Block implements EntityBlock {
                 .pushReaction(PushReaction.BLOCK));
         graveType = graveIn;
         registerDefaultState(getStateDefinition().any().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+        SHAPE_NORTH = graveIn.shape;
+        SHAPE_EAST = Shapes.rotate(graveIn.shape, OctahedralGroup.BLOCK_ROT_Y_90);
+        SHAPE_SOUTH = Shapes.rotate(graveIn.shape, OctahedralGroup.BLOCK_ROT_Y_180);
+        SHAPE_WEST = Shapes.rotate(graveIn.shape, OctahedralGroup.BLOCK_ROT_Y_270);
     }
 
     @Nullable
@@ -53,7 +64,13 @@ public class GraveBlock extends Block implements EntityBlock {
     @Nonnull
     @Override
     public VoxelShape getShape(@Nonnull BlockState pState, @Nonnull BlockGetter pLevel, @Nonnull BlockPos pPos, @Nonnull CollisionContext pContext) {
-        return graveType.shape;
+        Direction facing = pState.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        return switch (facing) {
+            case EAST -> SHAPE_EAST;
+            case SOUTH -> SHAPE_SOUTH;
+            case WEST -> SHAPE_WEST;
+            default -> SHAPE_NORTH;
+        };
     }
 
     @Override
