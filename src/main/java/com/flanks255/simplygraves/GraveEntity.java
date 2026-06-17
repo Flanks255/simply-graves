@@ -3,11 +3,15 @@ package com.flanks255.simplygraves;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -65,7 +69,6 @@ public class GraveEntity extends BlockEntity {
         return tag;
     }
 
-
     @Override
     public void handleUpdateTag(@NotNull ValueInput tag) {
         super.handleUpdateTag(tag);
@@ -74,6 +77,11 @@ public class GraveEntity extends BlockEntity {
         player = new UUID(tag.getLongOr("playerUUIDM",0), tag.getLongOr("playerUUIDL",0));
         playerName = tag.getStringOr("PlayerName","");
         deathTime = tag.getLongOr("DeathTime",0);
+    }
+
+    @Override
+    public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override

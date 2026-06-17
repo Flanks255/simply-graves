@@ -15,8 +15,10 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
@@ -45,33 +47,34 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity, GraveTe
         UUID gravePlayer = graveEntity.getPlayer();
         state.isMine = gravePlayer != null && player != null && gravePlayer.compareTo(player.getUUID()) == 0;
         state.timeRemaining = (graveEntity.getDeathTime() + (CommonConfig.DELAY_TO_PUBLIC.get() * 1000L)) - System.currentTimeMillis();
+        state.facing = graveEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
     }
 
     @Override
     public void submit(GraveRenderState state, @NotNull PoseStack matrixStack, @NotNull SubmitNodeCollector nodeCollector, @NotNull CameraRenderState camera) {
-        renderFace(state, matrixStack, nodeCollector, 0f);
-        renderFace(state, matrixStack, nodeCollector, 180f);
+        renderFace(state, matrixStack, nodeCollector, state.facing.toYRot());
+        renderFace(state, matrixStack, nodeCollector, state.facing.toYRot() + 180);
     }
 
     private void renderFace(GraveRenderState state, PoseStack matrixStack, SubmitNodeCollector nodeCollector, float yaw) {
         matrixStack.pushPose();
         matrixStack.translate(0.5, 0.5, 0.5);
         matrixStack.mulPose(Axis.YP.rotationDegrees(yaw));
-        matrixStack.translate(0, 0, 0.07);
+        matrixStack.translate(0, 0.5, 0);
         matrixStack.scale(1, -1, 1);
         matrixStack.scale(0.025F, 0.025F, 0.025F);
 
-        drawCenteredString(matrixStack, nodeCollector, Component.literal(state.playerName), -8, 0xffffff);
+        drawCenteredString(matrixStack, nodeCollector, Component.literal(state.playerName), 0, 0xffffff);
 
         if (!state.isMine) {
             if (state.timeRemaining > 0) {
-                matrixStack.translate(0, -15, 0);
+                matrixStack.translate(0, 10, 0);
                 matrixStack.scale(0.25f, 0.25f, 0.25f);
                 drawCenteredString(matrixStack, nodeCollector, Component.literal(format.format(state.timeRemaining)), 0, 0xffff00);
             }
         }
         if (state.isMine || state.timeRemaining == 0) {
-            matrixStack.translate(0, -15, 0);
+            matrixStack.translate(0, 10, 0);
             matrixStack.scale(0.25f, 0.25f, 0.25f);
             drawCenteredString(matrixStack, nodeCollector, Component.translatable("simplygraves.right_click"), 0, 0xffffff);
         }
@@ -117,5 +120,6 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity, GraveTe
         public String playerName = "";
         public boolean isMine;
         public long timeRemaining;
+        public Direction facing = Direction.NORTH;
     }
 }

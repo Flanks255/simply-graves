@@ -38,6 +38,14 @@ neoForge {
                 programArguments.addAll('--uuid', ENV.MCDEVUUID)
             }
         }
+        client2 {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', "simplygraves"
+            programArguments.addAll('--width', '1280', '--height', '720')
+            if (ENV.MCDEVUSER) {
+                programArguments.addAll('--username', 'DevUser')
+            }
+        }
 
         server {
             server()
