@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -17,11 +18,14 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,7 +38,7 @@ import javax.annotation.Nonnull;
 import java.util.UUID;
 
 @SuppressWarnings("deprecation")
-public class GraveBlock extends Block implements EntityBlock {
+public class GraveBlock extends Block implements EntityBlock, SimpleWaterloggedBlock {
     public final Grave graveType;
     public final VoxelShape SHAPE_NORTH;
     public final VoxelShape SHAPE_EAST;
@@ -48,7 +52,9 @@ public class GraveBlock extends Block implements EntityBlock {
                 .strength(200.0F, 3600000.0F)
                 .pushReaction(PushReaction.BLOCK));
         graveType = graveIn;
-        registerDefaultState(getStateDefinition().any().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+        registerDefaultState(getStateDefinition().any()
+                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+                .setValue(BlockStateProperties.WATERLOGGED, false));
         SHAPE_NORTH = graveIn.shape;
         SHAPE_EAST = Shapes.rotate(graveIn.shape, OctahedralGroup.BLOCK_ROT_Y_90);
         SHAPE_SOUTH = Shapes.rotate(graveIn.shape, OctahedralGroup.BLOCK_ROT_Y_180);
@@ -110,13 +116,20 @@ public class GraveBlock extends Block implements EntityBlock {
         }
         return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHit);
     }
-    //@Override //TODO
-    public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
-        //super.onBlockExploded(state, level, pos, explosion);
+
+    @Override
+    public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
+        //super.wasExploded(level, pos, explosion);
     }
 
     @Override
     protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(BlockStateProperties.HORIZONTAL_FACING);
+        builder.add(BlockStateProperties.HORIZONTAL_FACING, BlockStateProperties.WATERLOGGED);
+
+    }
+
+    @Override
+    protected FluidState getFluidState(BlockState state) {
+        return state.getValue(BlockStateProperties.WATERLOGGED)? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 }
