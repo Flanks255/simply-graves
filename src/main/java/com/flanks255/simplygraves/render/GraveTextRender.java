@@ -73,7 +73,7 @@ public class GraveTextRender implements BlockEntityRenderer<GraveEntity, GraveTe
                 drawCenteredString(matrixStack, nodeCollector, Component.literal(format.format(state.timeRemaining)), 0, 0xffff00);
             }
         }
-        if (state.isMine || state.timeRemaining == 0) {
+        if (state.isMine || state.timeRemaining <= 0) {
             matrixStack.translate(0, 10, 0);
             matrixStack.scale(0.25f, 0.25f, 0.25f);
             drawCenteredString(matrixStack, nodeCollector, Component.translatable("simplygraves.right_click"), 0, 0xffffff);
