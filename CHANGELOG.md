@@ -1,3 +1,8 @@
+### [ 1.2.0+mc26.1.2]
+- Updated to 26.1.2.
+- Added Grave Rotation.
+- Added Grave Waterlogging.
+
 ### [ 1.1.4+mc1.21 ]
 - Fixed grave entity data not being loaded correctly.
 
