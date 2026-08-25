@@ -50,7 +50,6 @@ public class SimplyGraves
 
         bus.addListener(this::setup);
         bus.addListener(Generator::gatherData);
-        bus.addListener(Generator::gatherData2);
         if (dist == Dist.CLIENT) {
             bus.addListener(EntityRenders::registerEntityRenderers);
         }

@@ -1,11 +1,11 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "simplygraves:block/gravestone_dripstone"
-    },
     "facing=east": {
       "model": "simplygraves:block/gravestone_dripstone",
       "y": 90
+    },
+    "facing=north": {
+      "model": "simplygraves:block/gravestone_dripstone"
     },
     "facing=south": {
       "model": "simplygraves:block/gravestone_dripstone",

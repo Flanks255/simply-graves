@@ -1,11 +1,11 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "simplygraves:block/gravestone_diorite"
-    },
     "facing=east": {
       "model": "simplygraves:block/gravestone_diorite",
       "y": 90
+    },
+    "facing=north": {
+      "model": "simplygraves:block/gravestone_diorite"
     },
     "facing=south": {
       "model": "simplygraves:block/gravestone_diorite",
