@@ -33,7 +33,9 @@ Run into trouble and die? simply run back to your grave, and right click it to r
     - If true, only OP's can set grave preference, Default: **false**
 - publicDelay
     - The delay in seconds a grave is protected, afterward the grave becomes public, and anyone can collect it, Default **3600** (1 hour)
-
+ 
+### Pull Requests
+- Please do not submit large AI generated pull requests, including version ports.
 
 ## Future plans.
 - User preferences for grave material.
